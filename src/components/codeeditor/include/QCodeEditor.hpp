@@ -3,6 +3,7 @@
 // Qt
 #include <QTextEdit> // Required for inheritance
 #include <qplaintextedit.h>
+#include <tooltab.hpp>
 
 class QCompleter;
 class QLineNumberArea;
@@ -13,7 +14,7 @@ class QFramedTextAttribute;
 /**
  * @brief Class, that describes code editor.
  */
-class QCodeEditor : public QPlainTextEdit
+class QCodeEditor : public QPlainTextEdit, public ToolWidget
 {
     Q_OBJECT
 
@@ -27,6 +28,15 @@ public:
     // Disable copying
     QCodeEditor(const QCodeEditor&) = delete;
     QCodeEditor& operator=(const QCodeEditor&) = delete;
+
+
+    void setBData(const QByteArray& data) override {
+        setPlainText(QString::fromUtf8(data));
+    }
+    QByteArray getBData() override {
+        return this->toPlainText().toUtf8();
+    }
+
 
     /**
      * @brief Method for getting first visible block

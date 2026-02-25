@@ -12,7 +12,7 @@ FileTab::FileTab(FilesTabWidget *fwparent, QString path)
 
 
 void FileTab::saveFile(){
-    ToolTab* tooltabInner = this->findChild<ToolTab*>("toolTabWidget");
+    ToolTabWidget* tooltabInner = this->findChild<ToolTabWidget*>("toolTabWidget");
     if (!tooltabInner) return;
     QFile file(filePath);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) return;
@@ -24,6 +24,6 @@ void FileTab::saveFile(){
 }
 
 void FileTab::fileModifyEvent(bool modified){
-    ToolTab* tooltabInner = this->findChild<ToolTab*>("toolTabWidget");
+    ToolTabWidget* tooltabInner = this->findChild<ToolTabWidget*>("toolTabWidget");
     parrentTabWidget->setTabText(parrentTabWidget->currentIndex(), QFileInfo(filePath).fileName()+"*");
 }

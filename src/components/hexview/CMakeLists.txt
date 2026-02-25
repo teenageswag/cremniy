@@ -29,11 +29,6 @@ target_link_libraries(${PROJECT_NAME}
         Qt::Widgets
 )
 
-target_include_directories(${PROJECT_NAME}
-    PUBLIC
-        "${PROJECT_SOURCE_DIR}/include"
-)
-
 target_sources(${PROJECT_NAME}
     PRIVATE 
         include/QHexView/model/buffer/qdevicebuffer.h
@@ -70,6 +65,12 @@ target_sources(${PROJECT_NAME}
         src/model/qhexmetadata.cpp
         src/model/qhexdocument.cpp
         src/qhexview.cpp
+)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../include
 )
 
 if(QHEXVIEW_ENABLE_DIALOGS)

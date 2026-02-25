@@ -14,11 +14,11 @@ class QCompleter;
 class QStyleSyntaxHighlighter;
 class QCodeEditor;
 
-class ToolTab : public QTabWidget
+class ToolTabWidget : public QTabWidget
 {
     Q_OBJECT
 public:
-    ToolTab(FileTab *fwparent, QString path);
+    ToolTabWidget(FileTab *fwparent, QString path);
 
     QCodeEditor* get_codeEditor();
     SyncFileData* m_syncfiledata;

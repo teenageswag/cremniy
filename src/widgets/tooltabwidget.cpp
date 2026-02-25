@@ -2,6 +2,7 @@
 #include "QHexView/model/buffer/qmemorybuffer.h"
 #include "QHexView/qhexview.h"
 #include "filetab.h"
+#include "tooltab.h"
 #include <QCodeEditor.hpp>
 #include <QFile>
 #include <QSyntaxStyle.hpp>
@@ -14,7 +15,7 @@
 #include <qboxlayout.h>
 #include <qfileinfo.h>
 
-ToolTab::ToolTab(FileTab *fwparent, QString path) :
+ToolTabWidget::ToolTabWidget(FileTab *fwparent, QString path) :
     m_codeEditor(nullptr),
     m_completers(),
     m_highlighters(),
@@ -32,63 +33,42 @@ ToolTab::ToolTab(FileTab *fwparent, QString path) :
 
     m_styles["default"] = QSyntaxStyle::defaultStyle();
 
-        QFile file(path);
-        if (!file.open(QIODevice::ReadOnly)) return;
-        QByteArray data = file.readAll(); // читаем все байты
-        file.close();
-        auto text = QString::fromUtf8(data); // преобразуем в QString
 
-        QFileInfo fileInfo(path);
-        QString ext = fileInfo.suffix();
+    // Code Editor
+    QCodeEditor* codeEditorWidget = new QCodeEditor(this);
+    codeEditorWidget->setSyntaxStyle(m_styles["default"]);
+    QFileInfo fileInfo(path);
+    QString ext = fileInfo.suffix();
+    codeEditorWidget->setCompleter  (m_completers[ext]);
+    codeEditorWidget->setHighlighter(m_highlighters[ext]);
 
-        QWidget *emptyWidget2 = new QWidget();
+    // Hex View
+    QHexView* hexViewWidget = new QHexView();
+    QHexDocument* document = QHexDocument::fromMemory<QMemoryBuffer>(data, nullptr);
+    hexViewWidget->setDocument(document);
 
-        QHexDocument* document = QHexDocument::fromMemory<QMemoryBuffer>(data, nullptr);
+    // Tabs
+    ToolWidget* codeEditorTab = new ToolWidget(this, path, codeEditorWidget);
+    ToolWidget* hexViewTab = new ToolWidget(this, path, hexViewWidget);
+    ToolWidget* DisassemblerTab = new ToolWidget(this, path, new QWidget(this));
 
-        QWidget *hextabwidget = new QWidget(this);
-        hextabwidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    // Tab Icons
+    QIcon codeIcon(":/icons/code.png");
+    QIcon hexIcon(":/icons/hex.png");
+    QIcon disasmIcon(":/icons/dasm.png");
 
-        QHexView* hexview = new QHexView(hextabwidget);
-        hexview->setDocument(document);
-        auto layout = new QVBoxLayout(hextabwidget);
-        layout->addWidget(hexview);
-        hextabwidget->setLayout(layout);
-
-        qDebug() << document->read(0, document->length());
-
-        QIcon codeIcon(":/icons/code.png");
-        QIcon hexIcon(":/icons/hex.png");
-        QIcon disasmIcon(":/icons/dasm.png");
-
-        m_codeEditor = new QCodeEditor(this);
-
-        m_syncfiledata = new SyncFileData(m_codeEditor, hexview);
-        m_syncfiledata->setBuffer(data);
-        m_syncfiledata->syncBuffer();
-
-        connect(document, &QHexDocument::dataChanged, this, [=](){ m_syncfiledata->setBuffer(document->read(0, document->length())); });
-
-        // CodeEditor
-        m_codeEditor->setSyntaxStyle(m_styles["default"]);
-        m_codeEditor->setCompleter  (m_completers[ext]);
-        m_codeEditor->setHighlighter(m_highlighters[ext]);
-
-        this->addTab(m_codeEditor, codeIcon, "Code");
-        this->addTab(hextabwidget, hexIcon, "Hex");
-        this->addTab(emptyWidget2, disasmIcon, "Disassembler");
-
-        connect(this, &QTabWidget::currentChanged, this, [=](int index){
-            qDebug() << "curr tab change:" << index;
-            m_syncfiledata->syncBuffer();
-        });
+    // Add Tabs
+    this->addTab(codeEditorTab, codeIcon, "Code");
+    this->addTab(hexViewTab, hexIcon, "Hex");
+    this->addTab(DisassemblerTab, disasmIcon, "Disassembler");
 
 }
 
-QCodeEditor* ToolTab::get_codeEditor(){
+QCodeEditor* ToolTabWidget::get_codeEditor(){
     return m_codeEditor;
 }
 
-void ToolTab::loadStyle(QString path, QString name)
+void ToolTabWidget::loadStyle(QString path, QString name)
 {
     QFile fl(path);
 

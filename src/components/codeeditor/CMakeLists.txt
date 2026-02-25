@@ -51,6 +51,7 @@ add_library(codeeditor STATIC
 target_include_directories(codeeditor PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/../../include
 )
 
 target_link_libraries(codeeditor PUBLIC Qt6::Widgets)

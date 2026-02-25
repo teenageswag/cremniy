@@ -9,6 +9,7 @@
 #include <QHexView/model/qhexdocument.h>
 #include <QList>
 #include <QRectF>
+#include <tooltab.hpp>
 
 #if defined(QHEXVIEW_ENABLE_DIALOGS)
 class HexFindDialog;
@@ -26,7 +27,7 @@ struct QHexCopyFormat {
     bool use_tabs{false};
 };
 
-class QHexView: public QAbstractScrollArea {
+class QHexView: public QAbstractScrollArea, public ToolWidget {
     Q_OBJECT
 
     struct PaintContext {
@@ -115,6 +116,13 @@ public:
     void removeComments(qint64 line);
     void unhighlight(qint64 line);
     void clearMetadata();
+
+    void setBData(const QByteArray& data) override  {
+        m_hexdocument->setData(data);
+    }
+    QByteArray getBData() override {
+        m_hexdocument->read(0, m_hexdocument->length());
+    }
 
 public Q_SLOTS:
 #if defined(QHEXVIEW_ENABLE_DIALOGS)
