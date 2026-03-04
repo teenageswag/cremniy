@@ -28,10 +28,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 
         app/IDEWindow/idewindow.cpp
         app/IDEWindow/idewindow.h
-        app/IDEWindow/idewindow.ui
+
         app/WelcomeWindow/welcomeform.cpp
         app/WelcomeWindow/welcomeform.h
-        app/WelcomeWindow/welcomeform.ui
+
 
         dialogs/filecreatedialog.cpp
         dialogs/filecreatedialog.h
@@ -51,14 +51,14 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         utils/iconprovider.h
 
         resources/cremniy_res.qrc
-        utils/syncfiledata.h utils/syncfiledata.cpp
+
         widgets/codeeditortab.h widgets/codeeditortab.cpp
         widgets/hexviewtab.h widgets/hexviewtab.cpp
         widgets/disassemblertab.h widgets/disassemblertab.cpp
 
         include/toolwidget.hpp
         include/tooltab.h
-        include/tooltab.cpp
+
 
         utils/utils.h
         utils/utils.cpp

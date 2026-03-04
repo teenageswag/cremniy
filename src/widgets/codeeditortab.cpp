@@ -13,8 +13,14 @@ CodeEditorTab::CodeEditorTab(QWidget *parent, QString path)
     QFileInfo fileInfo(path);
     QString ext = fileInfo.suffix();
 
-
     m_codeEditorWidget = new QCodeEditor(ext, this);
+
+    QTextOption opt = m_codeEditorWidget->document()->defaultTextOption();
+    opt.setTabStopDistance(20);
+    m_codeEditorWidget->document()->setDefaultTextOption(opt);
+
+    m_codeEditorWidget->document()->markContentsDirty(0, m_codeEditorWidget->document()->characterCount());
+    m_codeEditorWidget->viewport()->update();
 
     m_overlayWidget = new QWidget(this);
 

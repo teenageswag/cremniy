@@ -1,86 +1,117 @@
 #include "idewindow.h"
 #include "dialogs/filecreatedialog.h"
-#include "./ui_idewindow.h"
 #include "QFileSystemModel"
 #include "QMessageBox"
+#include <qheaderview.h>
 #include <qjsondocument.h>
 #include <qjsonobject.h>
 #include <QStandardPaths>
+#include <QApplication>
 
-IDEWindow::IDEWindow(QString ProjectPath, QJsonObject ProjectInfo, QWidget *parent)
+IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
 {
 
-    ui->setupUi(this);
     this->setWindowState(Qt::WindowMaximized);
+    this->setWindowTitle("Cremniy");
     SaveProjectInCache(ProjectPath);
 
-    QFile file(":/styles/style.qss");
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    qApp->setStyleSheet(styleSheet);
+    // Create Widgets/Layouts
+    m_menuBar = menuBar();
+    m_fileMenu = m_menuBar->addMenu("File");
+    m_editMenu = m_menuBar->addMenu("Edit");
+    m_viewMenu = m_menuBar->addMenu("View");
 
-    ui->splitter->setSizes({200, 1000});
-    ui->splitter->setCollapsible(0, false);
-    ui->splitter->setCollapsible(1, false);
-    ui->splitter->setStretchFactor(0, 0);
-    ui->splitter->setStretchFactor(1, 1);
+    m_file_openProject = new QAction("New Project", this);
+    m_file_newProject = new QAction("Open Project", this);
+    m_file_saveFile = new QAction("Save File", this);
 
-    ui->treeView->setMinimumWidth(180);
-    ui->treeView->setTextElideMode(Qt::ElideNone);
-    ui->treeView->setIndentation(12);
+    m_view_wordWrap = new QAction("Word Wrap", this);
+
+    m_statusBar = statusBar();
+
+    m_mainWindow = new QWidget(this);
+    m_mainLayout = new QHBoxLayout(m_mainWindow);
+    m_mainSplitter = new QSplitter(m_mainWindow);
+
+    m_filesTabWidget = new FilesTabWidget();
+    m_filesTreeView = new FileTreeView();
+
+    // Tunning Widgets/Layouts
+    m_fileMenu->addAction(m_file_openProject);
+    m_fileMenu->addAction(m_file_newProject);
+    m_fileMenu->addSeparator();
+    m_fileMenu->addAction(m_file_saveFile);
+
+    m_viewMenu->addAction(m_view_wordWrap);
+
+    setCentralWidget(m_mainWindow);
+
+    m_mainLayout->addWidget(m_mainSplitter);
+
+    m_filesTabWidget->setObjectName("filesTabWidget");
+
+    m_mainSplitter->addWidget(m_filesTreeView);
+    m_mainSplitter->addWidget(m_filesTabWidget);
+
+    m_mainSplitter->setSizes({200, 1000});
+    m_mainSplitter->setCollapsible(0, false);
+    m_mainSplitter->setCollapsible(1, false);
+    m_mainSplitter->setStretchFactor(0, 0);
+    m_mainSplitter->setStretchFactor(1, 1);
+
+    m_filesTreeView->setMinimumWidth(180);
+    m_filesTreeView->setTextElideMode(Qt::ElideNone);
+    m_filesTreeView->setIndentation(12);
 
     QFileSystemModel *model = new QFileSystemModel(this);
 
     model->setRootPath(ProjectPath);
 
     model->setReadOnly(false);
-    ui->treeView->setModel(model);
+    m_filesTreeView->setModel(model);
 
     // ограничиваем отображение только этой директории
-    ui->treeView->setRootIndex(model->index(ProjectPath));
+    m_filesTreeView->setRootIndex(model->index(ProjectPath));
     // model->setIconProvider(new IconProvider());
 
-    ui->treeView->setColumnHidden(1, true);
-    ui->treeView->setColumnHidden(2, true);
-    ui->treeView->setColumnHidden(3, true);
-    ui->treeView->header()->hide();
-    ui->treeView->setAnimated(true);
+    m_filesTreeView->setColumnHidden(1, true);
+    m_filesTreeView->setColumnHidden(2, true);
+    m_filesTreeView->setColumnHidden(3, true);
+    m_filesTreeView->header()->hide();
+    m_filesTreeView->setAnimated(true);
 
-    ui->horizontalLayout_2->setContentsMargins(0,0,0,0);
-    ui->horizontalLayout->setContentsMargins(0,0,0,0);
+    m_mainLayout->setContentsMargins(0,0,0,0);
 
-    while (ui->filesTabWidget->count() > 0) {
-        ui->filesTabWidget->removeTab(0);
+    while (m_filesTabWidget->count() > 0) {
+        m_filesTabWidget->removeTab(0);
     }
 
-    ui->filesTabWidget->setTabsClosable(true);
-    ui->filesTabWidget->setMovable(true);
+    m_filesTabWidget->setTabsClosable(true);
+    m_filesTabWidget->setMovable(true);
 
-    connect(ui->actionSave_File, &QAction::triggered, this, &IDEWindow::onSaveFile);
+    connect(m_file_saveFile, &QAction::triggered, this, &IDEWindow::onSaveFile);
 
-    connect(ui->filesTabWidget, &QTabWidget::tabCloseRequested,
+    connect(m_filesTabWidget, &QTabWidget::tabCloseRequested,
             this, [=](int index){
-                ui->filesTabWidget->removeTab(index);
+                m_filesTabWidget->removeTab(index);
             });
 
-    ui->actionSave_File->setShortcut(QKeySequence::Save);
+    m_file_saveFile->setShortcut(QKeySequence::Save);
 
-    ui->treeView->setEditTriggers(QAbstractItemView::EditKeyPressed);
+    m_filesTreeView->setEditTriggers(QAbstractItemView::EditKeyPressed);
 
-    ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
-    connect(ui->treeView, &QTreeView::customContextMenuRequested,
+    m_filesTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(m_filesTreeView, &QTreeView::customContextMenuRequested,
             this, &IDEWindow::onTreeContextMenu);
 
-    connect(ui->actionWord_Wrap, &QAction::triggered, this, &IDEWindow::on_menuBar_actionView_wordWrap_clicked);
+    connect(m_view_wordWrap, &QAction::triggered, this, &IDEWindow::on_menuBar_actionView_wordWrap_clicked);
 
+    connect(m_filesTreeView, &QTreeView::doubleClicked, this, &IDEWindow::on_treeView_doubleClicked);
 }
 
 IDEWindow::~IDEWindow()
-{
-    delete ui;
-}
+{}
 
 void IDEWindow::on_menuBar_actionView_wordWrap_clicked(){
     qDebug() << "on_menuBar_actionView_wordWrap_clicked";
@@ -105,7 +136,6 @@ void IDEWindow::SaveProjectInCache(const QString project_path){
     QTextStream out(&history_file);
     for (const QString& l : lines){
         if (!QDir(l).exists()) continue;
-        if (!QFile::exists(l+"/"+"project.cremniy")) continue;
         out << l << "\n";
     }
 
@@ -114,17 +144,17 @@ void IDEWindow::SaveProjectInCache(const QString project_path){
 
 void IDEWindow::onSaveFile()
 {
-    ui->filesTabWidget->saveCurrentFile();
+    m_filesTabWidget->saveCurrentFile();
 }
 
 void IDEWindow::on_treeView_doubleClicked(const QModelIndex &index)
 {
-    auto *model = static_cast<QFileSystemModel*>(ui->treeView->model());
+    auto *model = static_cast<QFileSystemModel*>(m_filesTreeView->model());
     if (model->isDir(index)) return;
     QString fileName = model->fileName(index);
     QString filePath = model->filePath(index);
 
-    ui->filesTabWidget->openFile(filePath, fileName);
+    m_filesTabWidget->openFile(filePath, fileName);
 
 }
 
@@ -136,9 +166,9 @@ void IDEWindow::on_treeView_clicked(const QModelIndex &index)
 
 void IDEWindow::onTreeContextMenu(const QPoint &pos)
 {
-    QModelIndex index = ui->treeView->indexAt(pos); // индекс под курсором
+    QModelIndex index = m_filesTreeView->indexAt(pos); // индекс под курсором
 
-    QFileSystemModel *model = qobject_cast<QFileSystemModel*>(ui->treeView->model());
+    QFileSystemModel *model = qobject_cast<QFileSystemModel*>(m_filesTreeView->model());
     if (!model)
         return;
 
@@ -152,7 +182,7 @@ void IDEWindow::onTreeContextMenu(const QPoint &pos)
 
         if (isDir){
             menu.addAction("Open", [this, path]() {
-                QFileSystemModel *model = qobject_cast<QFileSystemModel*>(ui->treeView->model());
+                QFileSystemModel *model = qobject_cast<QFileSystemModel*>(m_filesTreeView->model());
                 if (!model)
                     return;
 
@@ -161,17 +191,17 @@ void IDEWindow::onTreeContextMenu(const QPoint &pos)
                     return;
 
                 // Разворачиваем саму директорию
-                ui->treeView->expand(index);
+                m_filesTreeView->expand(index);
 
                 // Прокручиваем и выделяем
-                //ui->treeView->scrollTo(index);
-                //ui->treeView->setCurrentIndex(index);
-                //ui->treeView->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
+                //m_filesTreeView->scrollTo(index);
+                //m_filesTreeView->setCurrentIndex(index);
+                //m_filesTreeView->selectionModel()->select(index, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows);
 
             });
 
             menu.addAction("Rename", [this, path]() {
-                QFileSystemModel *model = qobject_cast<QFileSystemModel*>(ui->treeView->model());
+                QFileSystemModel *model = qobject_cast<QFileSystemModel*>(m_filesTreeView->model());
                 if (!model)
                     return;
 
@@ -180,7 +210,7 @@ void IDEWindow::onTreeContextMenu(const QPoint &pos)
                     return;
 
                 // Включаем редактирование индекса
-                ui->treeView->edit(index);
+                m_filesTreeView->edit(index);
             });
             menu.addAction("Delete", [path, this]() {
                 QDir dir(path);
@@ -201,10 +231,10 @@ void IDEWindow::onTreeContextMenu(const QPoint &pos)
         }
         else{
             menu.addAction("Open", [this, path, fileName]() {
-                ui->filesTabWidget->openFile(path, fileName);
+                m_filesTabWidget->openFile(path, fileName);
             });
             menu.addAction("Rename", [this, path]() {
-                QFileSystemModel *model = qobject_cast<QFileSystemModel*>(ui->treeView->model());
+                QFileSystemModel *model = qobject_cast<QFileSystemModel*>(m_filesTreeView->model());
                 if (!model)
                     return;
 
@@ -213,7 +243,7 @@ void IDEWindow::onTreeContextMenu(const QPoint &pos)
                     return;
 
                 // Включаем редактирование индекса
-                ui->treeView->edit(index);
+                m_filesTreeView->edit(index);
             });
             menu.addAction("Delete", [path,this]() {
                 QString dialogTitle = QString("Are you sure you want to delete the file \"%1\"?").arg(QFileInfo(path).fileName());
@@ -237,6 +267,6 @@ void IDEWindow::onTreeContextMenu(const QPoint &pos)
             fcd.exec();
         });
     }
-    menu.exec(ui->treeView->viewport()->mapToGlobal(pos));
+    menu.exec(m_filesTreeView->viewport()->mapToGlobal(pos));
 }
 

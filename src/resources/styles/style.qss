@@ -102,8 +102,8 @@ QTabWidget::pane {
         x1:0, y1:1, x2:0, y2:0,
         stop:0 #1f1f1f,
         stop:0.92 #1f1f1f,
-        stop:0.93 #0000ff,
-        stop:1 #0000ff
+        stop:0.93 #2626d5,
+        stop:1 #2626d5
     );
 
 }
@@ -123,8 +123,8 @@ QTabWidget::pane {
         x1:0, y1:0, x2:0, y2:1,
         stop:0 #1f1f1f,
         stop:0.92 #1f1f1f,
-        stop:0.93 #0000ff,
-        stop:1 #0000ff
+        stop:0.93 #2626d5,
+        stop:1 #2626d5
     );
     height: 20px;
 }

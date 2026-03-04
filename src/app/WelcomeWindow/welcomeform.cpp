@@ -1,7 +1,6 @@
 #include "welcomeform.h"
 #include "app/IDEWindow/idewindow.h"
 #include "widgets/tooltabwidget.h"
-#include "ui_welcomeform.h"
 #include <qboxlayout.h>
 #include <qdir.h>
 #include <qlineedit.h>
@@ -20,15 +19,10 @@
 
 WelcomeForm::WelcomeForm(QWidget *parent)
     : QWidget(parent)
-    , ui(new Ui::WelcomeForm)
 {
-    ui->setupUi(this);
-
-
-    QFile file(":/styles/style.qss");
-    file.open(QFile::ReadOnly);
-    QString styleSheet = QLatin1String(file.readAll());
-    qApp->setStyleSheet(styleSheet);
+    this->setWindowTitle("Cremniy");
+    this->setBaseSize(400, 300);
+    this->resize(400, 300);
 
     // Base
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
@@ -129,6 +123,8 @@ WelcomeForm::WelcomeForm(QWidget *parent)
 
     connect(backButton, &QPushButton::clicked, this, &WelcomeForm::L2BackButton);
     connect(createButton, &QPushButton::clicked, this, &WelcomeForm::L2CreateButton);
+
+    connect(history_project_list, &QListView::doubleClicked, this, &WelcomeForm::OpenRecentProjectHandler);
 }
 
 WelcomeForm::~WelcomeForm()
@@ -155,33 +151,20 @@ void WelcomeForm::OpenRecentProjectHandler(){
 
 void WelcomeForm::OpenProjectHandler()
 {
-    QFileDialog dlg(this);
-    dlg.setWindowTitle("Open project");
-    dlg.setNameFilter("Cremniy Project (*.cremniy)");
-    dlg.setFileMode(QFileDialog::ExistingFile);
-    dlg.setDirectory(QDir::homePath());
-
-    if (dlg.exec() == QDialog::Accepted) {
-        QFileInfo f(dlg.selectedFiles().first());
-        OpenProject(f.dir().path());
-    }
+    QString dir = QFileDialog::getExistingDirectory(
+        this,
+        "Choose Directory",
+        QDir::homePath(),
+        QFileDialog::ShowDirsOnly | QFileDialog::DontResolveSymlinks
+        );
+    if (dir.isEmpty()) return;
+    OpenProject(dir);
 }
 
 void WelcomeForm::OpenProject(QString path){
     if (!QDir(path).exists()) return;
-    if (!QFile::exists(path+"/"+"project.cremniy")) return;
-    QFile project_file(path+"/"+"project.cremniy");
-    if (!project_file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
 
-    // Читаем весь файл
-    QByteArray data = project_file.readAll();
-    project_file.close();
-
-    // Парсим JSON
-    QJsonDocument doc = QJsonDocument::fromJson(data);
-    QJsonObject project_info = doc.object();
-
-    IDEWindow *mw = new IDEWindow(path, project_info, nullptr);
+    IDEWindow *mw = new IDEWindow(path, nullptr);
     mw->setWindowState(Qt::WindowMaximized);
     mw->show();
     this->destroy();
@@ -239,27 +222,7 @@ void WelcomeForm::L2CreateButton()
         return;
     }
 
-    QFile project_file(new_project_path+"/"+"project.cremniy");
-    if (!project_file.open(QIODevice::WriteOnly)) {
-        info_label->setText("Failed to create project file!");
-        info_label->setVisible(true);
-        return;
-    }
-
-    QJsonObject project_info;
-    project_info["project_name"] = project_name;
-    project_info["project_language"] = language_comboBox->currentText();
-
-    // QJsonArray files;
-    // files.append("main.cpp");
-    // files.append("mainwindow.cpp");
-    // project["files"] = files;
-
-    QJsonDocument doc_proj_info(project_info);
-    project_file.write(doc_proj_info.toJson(QJsonDocument::Indented));
-    project_file.close();
-
-    IDEWindow *mw = new IDEWindow(new_project_path, project_info, nullptr);
+    IDEWindow *mw = new IDEWindow(new_project_path, nullptr);
     mw->show();
     this->destroy();
 }
@@ -284,7 +247,6 @@ void WelcomeForm::SetProjectHistoryList(){
     QStringList filtered;
     for (const QString& l : lines) {
         if (!QDir(l).exists()) continue;
-        if (!QFile::exists(l + "/project.cremniy")) continue;
         filtered << l;
     }
     lines = filtered;

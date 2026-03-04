@@ -5,6 +5,7 @@
 #include <QTextEdit> // Required for inheritance
 #include <qplaintextedit.h>
 #include <toolwidget.hpp>
+#include <QScrollBar>
 
 class QCompleter;
 class QLineNumberArea;
@@ -35,7 +36,8 @@ public:
     void setBData(const QByteArray& data) override {
         m_ignoreModification = true;
 
-        setPlainText(QString::fromUtf8(data));
+        QString text = QString::fromUtf8(data);
+        setPlainText(text);
         document()->setModified(false);
 
         m_ignoreModification = false;
@@ -48,11 +50,22 @@ public:
     {
         if (e->modifiers() & Qt::ControlModifier)
         {
+
             double delta = e->angleDelta().y() > 0 ? 1.1 : 1/1.1;
             scaleFactor *= delta;
             QFont f = font();
             f.setPointSizeF(12 * scaleFactor);
             setFont(f);
+
+            QFontMetrics fm(f);
+            double tabWidth = fm.horizontalAdvance(' ') * 4;
+
+            QTextOption opt = document()->defaultTextOption();
+            opt.setTabStopDistance(tabWidth);
+            document()->setDefaultTextOption(opt);
+
+            document()->markContentsDirty(0, document()->characterCount());
+            viewport()->update();
 
             e->accept();
             return;

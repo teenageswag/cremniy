@@ -342,10 +342,11 @@ void QCodeEditor::highlightParenthesis(QList<QTextEdit::ExtraSelection>& extraSe
                 // Select one character
                 c.movePosition(QTextCursor::Right, QTextCursor::KeepAnchor, 1);
                 sel.cursor = c;
+
                 return sel;
             };
 
-            extraSelection.append(makeSelection(textCursor().position()));
+            extraSelection.append(makeSelection(direction == 1 ? textCursor().position() : textCursor().position() - 1));
             extraSelection.append(makeSelection(position));
         }
 

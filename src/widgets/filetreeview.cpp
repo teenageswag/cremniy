@@ -2,7 +2,7 @@
 
 
 FileTreeView::FileTreeView(QWidget *parent)
-    : QTreeView(parent)  // ← вызываем конструктор базового класса
+    : QTreeView(parent)
 {
 }
 
@@ -12,5 +12,5 @@ void FileTreeView::mousePressEvent(QMouseEvent *event)
     if (index.isValid())
         emit mouseClicked(index, event->button());
 
-    QTreeView::mousePressEvent(event); // стандартное поведение
+    QTreeView::mousePressEvent(event);
 }
