@@ -14,13 +14,44 @@
 
 <br>
 
+## 📌 About the Project
+
+**Cremniy** is an integrated development environment for low-level programming.
+
+It combines tools for working with binary files, memory, and system-level code in a single application.
+
+### The project is aimed at:
+
+- system software developers
+- reverse engineers
+- information security specialists
+- embedded systems developers
+
 ## ✨ Features
-- Code Editor
-- Hex Editor
-- ~Disassembler~
-- ~Debugger~
-- ~Memory Map~
 
+### Current:
 
+- Code editor
+- HEX editor
 
+### Planned:
 
+- Disassembler
+- Debugger
+- Memory visualization
+
+## 🤝 Contributing
+
+Contributions are **welcome**.
+
+All contributors will be added to [ACKNOWLEDGEMENTS.md](ACKNOWLEDGEMENTS.md)  
+and mentioned at the end of each video on the [YouTube channel](https://www.youtube.com/@igmunv).
+
+## 🛠️ Build
+
+```
+mkdir build
+cd build
+cmake ../src
+cmake --build .
+```

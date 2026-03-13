@@ -7,6 +7,7 @@
 #include <qjsonobject.h>
 #include <QStandardPaths>
 #include <QApplication>
+#include "globalwidgetsmanager.h"
 
 IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     : QMainWindow(parent)
@@ -27,16 +28,19 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     m_file_saveFile = new QAction("Save File", this);
 
     m_view_wordWrap = new QAction("Word Wrap", this);
+    m_view_wordWrap->setCheckable(true);
+    m_view_wordWrap->setChecked(true);
+    GlobalWidgetsManager::instance().set_IDEWindow_menuBar_view_wordWrap(m_view_wordWrap);
 
     m_statusBar = statusBar();
 
-    m_mainWindow = new QWidget(this);
-    m_mainLayout = new QHBoxLayout(m_mainWindow);
-    m_mainSplitter = new QSplitter(m_mainWindow);
+    m_mainWidget = new QWidget(this);
+    m_mainLayout = new QHBoxLayout(m_mainWidget);
+    m_mainSplitter = new QSplitter(m_mainWidget);
 
     m_filesTabWidget = new FilesTabWidget();
     QWidget* leftWidget = new QWidget();
-    QVBoxLayout* leftLayout = new QVBoxLayout(m_mainWindow);
+    QVBoxLayout* leftLayout = new QVBoxLayout(m_mainWidget);
     leftLayout->setContentsMargins(0,0,0,0);
     m_filesTreeView = new FileTreeView();
 
@@ -76,7 +80,7 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
 
     m_viewMenu->addAction(m_view_wordWrap);
 
-    setCentralWidget(m_mainWindow);
+    setCentralWidget(m_mainWidget);
 
     m_mainLayout->addWidget(m_mainSplitter);
 

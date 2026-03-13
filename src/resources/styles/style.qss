@@ -105,7 +105,12 @@ QTabWidget::pane {
         stop:0.93 #2626d5,
         stop:1 #2626d5
     );
+    border-radius: 2px
 
+}
+
+#filesTabWidget QTabBar::tab:hover:!selected  {
+    background-color: #333333;
 }
 
 #toolTabWidget QTabBar::tab {
@@ -115,6 +120,7 @@ QTabWidget::pane {
     height: 20px;
     min-width: 100px;
     max-width: 200px;
+    border-radius: 0px
 }
 
 #toolTabWidget QTabBar::tab:selected {
@@ -127,6 +133,11 @@ QTabWidget::pane {
         stop:1 #2626d5
     );
     height: 20px;
+    border-radius: 2px
+}
+
+#toolTabWidget QTabBar::tab:hover:!selected  {
+    background-color: #333333;
 }
 
 QTreeView::item:selected {
@@ -161,7 +172,26 @@ QMenu::item:selected {
     background: #333333;
 }
 
+QMenu::item {
+    padding: 4px 4px 4px 4px;
+}
 
+QMenu::indicator {
+    width: 12px;
+    height: 12px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border-radius: 2px;
+    border: 1px solid #1f1f1f;
+}
+
+QMenu::indicator:checked {
+    background-color: #2c7c32;
+}
+
+QMenu::indicator:unchecked {
+    background-color: #262626;
+}
 
 
 QPushButton[state="green"] {
@@ -174,3 +204,50 @@ QPushButton::pressed[state="green"] {
 background-color: #163318; border: 2px solid #2c7c32; font-weight: bold;
 }
 
+/* Vertical QScrollBar */
+
+QScrollBar:vertical {
+    background: #1f1f1f;
+    width: 16px;
+}
+
+QScrollBar::handle:vertical {
+    background: #262626;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+}
+
+QScrollBar::handle:vertical:hover {
+    background: #333333;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+}
+
+QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+    background: none;
+    height: 16px;
+}
+
+/* Horizontal QScrollBar */
+
+QScrollBar:horizontal {
+    background: #1f1f1f;
+    height: 16px;
+}
+
+QScrollBar::handle:horizontal {
+    background: #262626;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+}
+
+QScrollBar::handle:horizontal:hover {
+    background: #333333;
+    border: 1px solid #1f1f1f;
+    border-radius: 2px;
+}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+    background: none;
+    width: 16px;
+}

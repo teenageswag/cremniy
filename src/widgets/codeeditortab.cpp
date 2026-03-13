@@ -5,6 +5,7 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qstackedlayout.h>
+#include "globalwidgetsmanager.h"
 
 CodeEditorTab::CodeEditorTab(QWidget *parent, QString path)
     : QWidget{parent}
@@ -59,6 +60,15 @@ CodeEditorTab::CodeEditorTab(QWidget *parent, QString path)
     m_overlayWidget->hide();
 
     setLayout(stack);
+
+    connect(GlobalWidgetsManager::instance().get_IDEWindow_menuBar_view_wordWrap(),
+            &QAction::changed,
+            this, [this]{
+                if (GlobalWidgetsManager::instance().get_IDEWindow_menuBar_view_wordWrap()->isChecked())
+                    m_codeEditorWidget->setWordWrapMode(QTextOption::WordWrap);
+                else
+                    m_codeEditorWidget->setWordWrapMode(QTextOption::NoWrap);
+            });
 
     connect(openHexBtn, &QPushButton::clicked, this, [this]{
         emit setHexViewTab();

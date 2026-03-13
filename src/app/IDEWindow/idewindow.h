@@ -42,7 +42,7 @@ private:
 
     QAction* m_view_wordWrap;
 
-    QWidget* m_mainWindow;
+    QWidget* m_mainWidget;
     QHBoxLayout* m_mainLayout;
     QSplitter* m_mainSplitter;
 
