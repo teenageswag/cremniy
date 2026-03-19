@@ -52,13 +52,17 @@ QCodeEditor::QCodeEditor(QString ext, QWidget* widget) :
 }
 
 void QCodeEditor::initLanguages(){
-    m_completers["c"] = new QCECompleter(":/languages/python.xml");
-    m_completers["cpp"] = new QCECompleter(":/languages/python.xml");
-    m_completers["asm"] = new QCECompleter(":/languages/python.xml");
+    m_completers["c"] = new QCECompleter(":/languages/c.xml");
+    m_completers["cpp"] = new QCECompleter(":/languages/cpp.xml");
+    m_completers["asm_intel"] = new QCECompleter(":/languages/asm_intel.xml");
+    m_completers["asm_att"] = new QCECompleter(":/languages/asm_att.xml");
+    m_completers["rs"] = new QCECompleter(":/languages/rust.xml");
 
     m_highlighters["c"] = new QCXXHighlighter;
     m_highlighters["cpp"] = new QCXXHighlighter;
-    m_highlighters["asm"] = new QCXXHighlighter;
+    m_highlighters["asm_intel"] = new QCXXHighlighter;
+    m_highlighters["asm_att"] = new QCXXHighlighter;
+    m_highlighters["rs"] = new QCXXHighlighter;
 
     m_styles["default"] = QSyntaxStyle::defaultStyle();
 }

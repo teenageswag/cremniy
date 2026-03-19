@@ -5,5 +5,9 @@
         <file>languages/lua.xml</file>
         <file>languages/glsl.xml</file>
         <file>languages/cpp.xml</file>
+        <file>languages/c.xml</file>
+        <file>languages/asm_intel.xml</file>
+        <file>languages/asm_att.xml</file>
+        <file>languages/rust.xml</file>
     </qresource>
 </RCC>
