@@ -21,9 +21,12 @@
 ### Описание
 
 **ToolTab** - это вкладка инструмента для работы пользователя с файлом. Примеры **ToolTab**:
-- **Редактор кода**;
-- **HEX-редактор**;
-- **Дизассемблер**.
+- **Редактор кода**<br>
+<img width="400" height="300" alt="code_tooltab" src="https://github.com/user-attachments/assets/f4d9d9c5-acbb-42ee-a3e1-a2d773c94d89" /><br>
+- **HEX-редактор**<br>
+<img width="400" height="300" alt="hex_tooltab" src="https://github.com/user-attachments/assets/cb66ffa9-1852-4200-809e-77ece6687d32" /><br>
+- **Дизассемблер**<br>
+<img width="400" height="300" alt="dasm_tooltab" src="https://github.com/user-attachments/assets/d72c642b-9b02-4dc8-8f03-0224490b4d3e" /><br>
 
 Каждый **ToolTab** является независимым модулем и регистрируется через компонент **ToolTabFactory**.
 
