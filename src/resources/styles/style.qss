@@ -145,11 +145,13 @@ QTabWidget::pane {
 /* Вкладки типов парсинга в HEX */
 
 QListWidget#hexTabsList {
-    background: transparent;
+    background: #1f1f1f;
     border: none;
     min-width: 120px;
     max-width: 200px;
     font-size: 12px;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 QListWidget#hexTabsList::item {
