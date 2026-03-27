@@ -6,12 +6,8 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qstackedlayout.h>
-#include <QToolTip>
-#include <QHelpEvent>
-#include <QTextCursor>
 #include "filemanager.h"
 #include "utils.h"
-#include "utils/instructionhelpservice.h"
 
 #include <QLineEdit>
 #include <QShortcut>
@@ -45,13 +41,6 @@ CodeEditorTab::CodeEditorTab(FileDataBuffer* buffer, QWidget *parent)
     // - - Create "Code Editor" Page - -
 
     m_codeEditorWidget = new QCodeEditor(this);
-    m_codeEditorWidget->viewport()->setMouseTracking(true);
-    m_codeEditorWidget->viewport()->installEventFilter(this);
-    connect(m_codeEditorWidget, &QPlainTextEdit::cursorPositionChanged, this, [this]() {
-        if (!m_codeEditorWidget || !m_codeEditorWidget->hasFocus())
-            return;
-        const QPoint p = m_codeEditorWidget->cursorRect().bottomRight();
-    });
 
     QTextOption opt = m_codeEditorWidget->document()->defaultTextOption();
     opt.setTabStopDistance(20);
