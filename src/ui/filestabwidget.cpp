@@ -70,11 +70,6 @@ bool FilesTabWidget::eventFilter(QObject *obj, QEvent *event) {
   // Переключение вкладок
 
   // ALT + Mouse Wheel UP/DOWN
-  /*
-    warn: у нас ща не горизонтального скролла в коде, но если появится, то
-    надо будет что-то придумать с этим
-  */
-
   if (event->type() == QEvent::Wheel) {
     QWheelEvent *we = static_cast<QWheelEvent *>(event);
     if (we->modifiers() == Qt::AltModifier) {
@@ -88,6 +83,7 @@ bool FilesTabWidget::eventFilter(QObject *obj, QEvent *event) {
       }
     }
   }
+  
   // ALT + Arrow LEFT/RIGHT
   if (event->type() == QEvent::KeyPress) {
     QKeyEvent *key = static_cast<QKeyEvent *>(event);
