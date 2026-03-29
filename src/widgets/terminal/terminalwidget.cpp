@@ -41,6 +41,7 @@ TerminalWidget::TerminalWidget(QWidget *parent) : QWidget(parent) {
         "font-family: 'Consolas', 'DejaVu Sans Mono', monospace; font-size: 10pt;"
     );
     layout->addWidget(m_display);
+    setFocusProxy(m_display);
 
     m_process = new QProcess(this);
     m_process->setProcessChannelMode(QProcess::MergedChannels);

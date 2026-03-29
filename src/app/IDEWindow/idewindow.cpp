@@ -37,11 +37,12 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     m_verticalSplitter = new QSplitter(Qt::Vertical, m_mainWidget);
 
     m_terminal = new TerminalWidget(this);
+    m_terminal->setVisible(false);
 
     QWidget* leftWidget = new QWidget();
     QVBoxLayout* leftLayout = new QVBoxLayout(leftWidget);
     leftLayout->setContentsMargins(0,0,0,0);
-    
+
     m_filesTabWidget = new FilesTabWidget();
     m_filesTabWidget->setObjectName("filesTabWidget");
     m_filesTreeView = new FileTreeView();
@@ -117,6 +118,9 @@ IDEWindow::~IDEWindow()
 
 void IDEWindow::on_Toggle_Terminal(bool checked) {
     m_terminal->setVisible(checked);
+    if(checked) {
+        m_terminal->setFocus();
+    }
 }
 
 void IDEWindow::SaveProjectInCache(const QString & project_path){

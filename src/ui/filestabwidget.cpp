@@ -67,30 +67,33 @@ void FilesTabWidget::saveFileSlot() {
 }
 
 bool FilesTabWidget::eventFilter(QObject *obj, QEvent *event) {
-  // Shift + Mouse Wheel: переключения вкладок
+  // Переключение вкладок
+
+  // ALT + Mouse Wheel UP/DOWN
   if (event->type() == QEvent::Wheel) {
     QWheelEvent *we = static_cast<QWheelEvent *>(event);
-    if (we->modifiers() == Qt::ShiftModifier) {
-      /*
-      только если курсор в области filestab виджетов
-      warn: у нас ща не горизонтального скролла в коде, но если появится, то
-      надо будет что-то придумать с этим
-      */
-      QWidget *src = qobject_cast<QWidget *>(obj);
-      if (!src || !isAncestorOf(src))
-        return QTabWidget::eventFilter(obj, event);
-
+    if (we->modifiers() == Qt::AltModifier) {
       int delta = we->angleDelta().y();
       if (delta == 0)
         delta = we->angleDelta().x();
 
       if (delta != 0 && count() > 1) {
-        int newIdx = currentIndex() + (delta > 0 ? 1 : -1);
-        if (newIdx < 0)
-          newIdx = count() - 1;
-        else if (newIdx >= count())
-          newIdx = 0;
-        setCurrentIndex(newIdx);
+        switchTab(delta > 0 ? 1 : -1);
+        return true;
+      }
+    }
+  }
+  
+  // ALT + Arrow LEFT/RIGHT
+  if (event->type() == QEvent::KeyPress) {
+    QKeyEvent *key = static_cast<QKeyEvent *>(event);
+    if (key->modifiers() == Qt::AltModifier) {
+      if (key->key() == Qt::Key_Left) {
+        switchTab(-1);
+        return true;
+      }
+      if (key->key() == Qt::Key_Right) {
+        switchTab(1);
         return true;
       }
     }
@@ -114,4 +117,13 @@ bool FilesTabWidget::eventFilter(QObject *obj, QEvent *event) {
     }
   }
   return QTabWidget::eventFilter(obj, event);
+}
+
+void FilesTabWidget::switchTab(int page) {
+  int newIdx = currentIndex() + page;
+  if (newIdx < 0)
+    newIdx = count() - 1;
+  else if (newIdx >= count())
+    newIdx = 0;
+  setCurrentIndex(newIdx);
 }
