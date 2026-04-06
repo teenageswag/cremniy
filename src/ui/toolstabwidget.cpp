@@ -111,11 +111,15 @@ ToolTab* ToolsTabWidget::createToolTab(const QString& toolId)
     connect(tab, &ToolTab::dataEqual, this, &ToolsTabWidget::removeStar);
 
     int insertIndex = count();
-    for (int index = 0; index < count(); ++index) {
-        const int existingOrder = widget(index)->property("toolTabOrder").toInt();
-        if (descriptor.order < existingOrder) {
-            insertIndex = index;
-            break;
+    if (descriptor.group == ToolTabGroup::Always) {
+        for (int index = 0; index < count(); ++index) {
+            QWidget* existingWidget = widget(index);
+            const bool existingClosable = existingWidget->property("toolTabClosable").toBool();
+            const int existingOrder = existingWidget->property("toolTabOrder").toInt();
+            if (existingClosable || descriptor.order < existingOrder) {
+                insertIndex = index;
+                break;
+            }
         }
     }
 

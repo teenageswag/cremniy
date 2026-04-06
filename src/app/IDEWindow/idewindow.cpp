@@ -165,8 +165,10 @@ void IDEWindow::on_SetTabWidth(int width)
 {
     const auto editors = findChildren<CustomCodeEditor*>();
     for (CustomCodeEditor* editor : editors) {
-        if (editor)
+        if (editor) {
             editor->setTabDisplaySize(width);
+            editor->setTabReplaceSize(width);
+        }
     }
 }
 
