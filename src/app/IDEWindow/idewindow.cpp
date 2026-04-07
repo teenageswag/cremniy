@@ -21,8 +21,8 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
 
     // - - Menu Bar - -
     MenuBarBuilder* menuBarBuilder = new MenuBarBuilder(menuBar(), this);
-
     menuBar()->setNativeMenuBar(false);
+
     // - - Widgets - -
     m_statusBar = statusBar();
 
@@ -41,6 +41,7 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
 
     m_leftSidebar = new QWidget(this);
     QVBoxLayout* leftLayout = new QVBoxLayout(m_leftSidebar);
+
     leftLayout->setContentsMargins(0,0,0,0);
 
     m_filesTabWidget = new FilesTabWidget(this);
@@ -53,7 +54,7 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     m_mainSplitter->setSizes({200, 1000});
 
     m_verticalSplitter->addWidget(m_mainSplitter); // Сверху все наше IDE
-    m_verticalSplitter->setSizes({800, 200});      // пр
+    m_verticalSplitter->setSizes({800, 200});
 
     m_mainLayout->addWidget(m_verticalSplitter);
     setCentralWidget(m_mainWidget);
@@ -67,7 +68,7 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     m_verticalSplitter->setSizes({800, 200});
     
     if (m_verticalSplitter->count() > 1) {
-    m_verticalSplitter->setCollapsible(1, true);
+        m_verticalSplitter->setCollapsible(1, true);
     }
 
     m_filesTreeView->setMinimumWidth(180);
@@ -101,8 +102,7 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
 
     connect(this, &IDEWindow::saveFileSignal, m_filesTabWidget, &FilesTabWidget::saveFileSlot);
 
-    connect(m_filesTabWidget, &QTabWidget::tabCloseRequested,
-            m_filesTabWidget, &FilesTabWidget::closeTab);
+    connect(m_filesTabWidget, &QTabWidget::tabCloseRequested,m_filesTabWidget, &FilesTabWidget::closeTab);
     connect(m_filesTreeView, &QTreeView::customContextMenuRequested,this, &IDEWindow::on_Tree_ContextMenu);
     connect(m_filesTreeView, &QTreeView::doubleClicked, this, &IDEWindow::on_treeView_doubleClicked);
 }
@@ -127,8 +127,9 @@ bool IDEWindow::openToolForCurrentFile(const QString& toolId)
 
 void IDEWindow::on_Toggle_Terminal(bool checked) {
     if (checked && !m_terminal) {
-        m_terminal = new TerminalWidget(this, m_projectPath);
+        m_terminal = new TerminalWidget(this);
         m_verticalSplitter->addWidget(m_terminal);
+        m_verticalSplitter->setCollapsible(1, true);
         m_verticalSplitter->setSizes({800, 200});
     }
 
