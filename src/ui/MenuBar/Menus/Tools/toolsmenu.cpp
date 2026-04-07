@@ -1,6 +1,6 @@
 #include "toolsmenu.h"
 #include "core/ToolTabFactory.h"
-#include "dialogs/reversecalculatordialog.h"
+#include "dialogs/reversecalculator/reversecalculatordialog.h"
 #include "dialogs/dataconverterdialog.h"
 
 #include "ui/MenuBar/menufactory.h"

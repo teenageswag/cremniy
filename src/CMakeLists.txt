@@ -42,8 +42,10 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         dialogs/filecreatedialog.h
         dialogs/settingsdialog.cpp
         dialogs/settingsdialog.h
-        dialogs/reversecalculatordialog.cpp
-        dialogs/reversecalculatordialog.h
+        dialogs/reversecalculator/reversecalculatordialog.cpp
+        dialogs/reversecalculator/reversecalculatordialog.h
+        dialogs/reversecalculator/reversecalculatorengine.cpp
+        dialogs/reversecalculator/reversecalculatorengine.h
         dialogs/dataconverterdialog.cpp
         dialogs/dataconverterdialog.h
 
