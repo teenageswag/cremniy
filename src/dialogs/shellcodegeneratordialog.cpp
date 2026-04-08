@@ -92,7 +92,8 @@ ShellcodeGeneratorDialog::ShellcodeGeneratorDialog(QWidget *parent) : QDialog(pa
     toolbar->addSpacing(10);
     toolbar->addWidget(new QLabel(tr("Output style:"), this));
     m_shellcodeStyle = new QComboBox(this);
-    m_shellcodeStyle->setMinimumWidth(80);
+    m_shellcodeStyle->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+    m_shellcodeStyle->setMinimumContentsLength(5);
 	for (int i = 0; i < kStyleCount; ++i) {
     	m_shellcodeStyle->addItem(QString::fromUtf8(kStyles[i].label), kStyles[i].id);
 	}
