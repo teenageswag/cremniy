@@ -88,6 +88,10 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     m_filesTreeView->setAnimated(true);
     m_filesTreeView->setEditTriggers(QAbstractItemView::EditKeyPressed);
     m_filesTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_filesTreeView->setDragEnabled(true);
+    m_filesTreeView->setAcceptDrops(true);
+    m_filesTreeView->setDropIndicatorShown(true);
+    m_filesTreeView->setDragDropMode(QAbstractItemView::DragDrop);
 
     m_mainLayout->setContentsMargins(0,0,0,0);
 
