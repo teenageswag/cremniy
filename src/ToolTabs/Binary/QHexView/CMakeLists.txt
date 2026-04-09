@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 3.13)
-
 project(QHexView)
 
 option(QHEXVIEW_ENABLE_DIALOGS "BuiltIn dialogs" ON)
