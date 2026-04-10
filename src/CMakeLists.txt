@@ -70,19 +70,7 @@ qt_add_executable(${PROJECT_NAME}
     # UI Menubar
     ui/MenuBar/menubarbuilder.h ui/MenuBar/menubarbuilder.cpp
     ui/MenuBar/menufactory.h ui/MenuBar/menufactory.cpp
-    ui/MenuBar/Menus/File/filemenu.h ui/MenuBar/Menus/File/filemenu.cpp
     ui/MenuBar/basemenu.h
-    ui/MenuBar/Menus/Edit/editmenu.h ui/MenuBar/Menus/Edit/editmenu.cpp
-    ui/MenuBar/Menus/View/viewmenu.h ui/MenuBar/Menus/View/viewmenu.cpp
-    ui/MenuBar/Menus/Build/buildmenu.h ui/MenuBar/Menus/Build/buildmenu.cpp
-    ui/MenuBar/Menus/Tools/toolsmenu.h ui/MenuBar/Menus/Tools/toolsmenu.cpp
-    ui/MenuBar/Menus/References/referencesmenu.h ui/MenuBar/Menus/References/referencesmenu.cpp
-    ui/MenuBar/Menus/References/referencewindow.h
-    ui/MenuBar/Menus/References/Windows/AsciiChars/asciicharsref.cpp
-    ui/MenuBar/Menus/References/Windows/AsciiChars/asciicharsref.h
-    ui/MenuBar/Menus/References/referencewindowfactory.h ui/MenuBar/Menus/References/referencewindowfactory.cpp
-
-
 
 )
 
@@ -106,8 +94,12 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs/HexEditor/ ${CMAKE_BINARY_DIR}
 target_link_libraries(${PROJECT_NAME} PRIVATE HexEditor)
 
 # - - Tools - -
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Tools/References/)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Tools/Tabs/)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/Tools/Windows/)
+
+# - - Menus - -
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/ui/MenuBar/Menus/)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets)
 
