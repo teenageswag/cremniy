@@ -17,7 +17,10 @@ int main(int argc, char *argv[])
     QIcon::setThemeName("phoicons");         // маленькими буквами!
 
     QFile file(":/styles/style.qss");
-    file.open(QFile::ReadOnly);
+    if (!file.open(QFile::ReadOnly)) {
+        qWarning() << "Failed to open the style file: " << file.errorString();
+        return 1;
+    }
     QString styleSheet = QLatin1String(file.readAll());
     a.setStyleSheet(styleSheet);
 

@@ -1,5 +1,6 @@
 #include "idewindow.h"
 #include "dialogs/filecreatedialog.h"
+#include "widgets/filetab.h"
 #include "QFileSystemModel"
 #include "QMessageBox"
 #include <qheaderview.h>
@@ -11,7 +12,7 @@
 #include "ui/MenuBar/menubarbuilder.h"
 
 IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
-    : QMainWindow(parent)
+    : QMainWindow(parent), m_projectPath(ProjectPath)
 {
 
     // - - Window Settings - -
@@ -20,8 +21,8 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
 
     // - - Menu Bar - -
     MenuBarBuilder* menuBarBuilder = new MenuBarBuilder(menuBar(), this);
-
     menuBar()->setNativeMenuBar(false);
+
     // - - Widgets - -
     m_statusBar = statusBar();
 
@@ -38,8 +39,9 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     // m_terminal->setVisible(false);
     m_terminal = nullptr;
 
-    QWidget* leftWidget = new QWidget(this);
-    QVBoxLayout* leftLayout = new QVBoxLayout(leftWidget);
+    m_leftSidebar = new QWidget(this);
+    QVBoxLayout* leftLayout = new QVBoxLayout(m_leftSidebar);
+
     leftLayout->setContentsMargins(0,0,0,0);
 
     m_filesTabWidget = new FilesTabWidget(this);
@@ -47,17 +49,16 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     m_filesTreeView = new FileTreeView();
     leftLayout->addWidget(m_filesTreeView);
 
-    m_mainSplitter->addWidget(leftWidget);
+    m_mainSplitter->addWidget(m_leftSidebar);
     m_mainSplitter->addWidget(m_filesTabWidget);
     m_mainSplitter->setSizes({200, 1000});
 
     m_verticalSplitter->addWidget(m_mainSplitter); // Сверху все наше IDE
-    m_verticalSplitter->setSizes({800, 200});      // пр
+    m_verticalSplitter->setSizes({800, 200});
 
     m_mainLayout->addWidget(m_verticalSplitter);
     setCentralWidget(m_mainWidget);
 
-    leftLayout->addWidget(m_filesTreeView);
 
     // - - Tunning Widgets/Layouts - -
     m_mainSplitter->setSizes({200, 1000});
@@ -88,6 +89,10 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
     m_filesTreeView->setAnimated(true);
     m_filesTreeView->setEditTriggers(QAbstractItemView::EditKeyPressed);
     m_filesTreeView->setContextMenuPolicy(Qt::CustomContextMenu);
+    m_filesTreeView->setDragEnabled(true);
+    m_filesTreeView->setAcceptDrops(true);
+    m_filesTreeView->setDropIndicatorShown(true);
+    m_filesTreeView->setDragDropMode(QAbstractItemView::DragDrop);
 
     m_mainLayout->setContentsMargins(0,0,0,0);
 
@@ -102,14 +107,32 @@ IDEWindow::IDEWindow(QString ProjectPath, QWidget *parent)
 
     connect(this, &IDEWindow::saveFileSignal, m_filesTabWidget, &FilesTabWidget::saveFileSlot);
 
-    connect(m_filesTabWidget, &QTabWidget::tabCloseRequested,
-            m_filesTabWidget, &FilesTabWidget::closeTab);
+    connect(m_filesTabWidget, &QTabWidget::tabCloseRequested,m_filesTabWidget, &FilesTabWidget::closeTab);
     connect(m_filesTreeView, &QTreeView::customContextMenuRequested,this, &IDEWindow::on_Tree_ContextMenu);
     connect(m_filesTreeView, &QTreeView::doubleClicked, this, &IDEWindow::on_treeView_doubleClicked);
+
+    connect(this, &IDEWindow::setWordWrapSignal, m_filesTabWidget, &FilesTabWidget::setWordWrapSlot);
+    connect(this, &IDEWindow::setTabReplaceSignal, m_filesTabWidget, &FilesTabWidget::setTabReplaceSlot);
+    connect(this, &IDEWindow::setTabWidthSignal, m_filesTabWidget, &FilesTabWidget::setTabWidthSlot);
 }
 
 IDEWindow::~IDEWindow()
 {}
+
+FileTab* IDEWindow::currentFileTab() const
+{
+    return qobject_cast<FileTab*>(m_filesTabWidget->currentWidget());
+}
+
+bool IDEWindow::openToolForCurrentFile(const QString& toolId)
+{
+    FileTab* fileTab = currentFileTab();
+    if (!fileTab || !fileTab->toolsTabWidget()) {
+        return false;
+    }
+
+    return fileTab->toolsTabWidget()->openToolTab(toolId) != nullptr;
+}
 
 void IDEWindow::on_Toggle_Terminal(bool checked) {
     if (checked && !m_terminal) {
@@ -122,12 +145,31 @@ void IDEWindow::on_Toggle_Terminal(bool checked) {
     if (!m_terminal) {
         return;
     }
-    
+
     m_terminal->setVisible(checked);
 
     if(checked) {
         m_terminal->setFocus();
     }
+}
+
+void IDEWindow::on_SetWordWrap(bool checked)
+{
+    emit setWordWrapSignal(checked);
+}
+
+void IDEWindow::on_SetTabReplace(bool checked)
+{
+    emit setTabReplaceSignal(checked);
+}
+
+void IDEWindow::on_SetTabWidth(int width)
+{
+    emit setTabWidthSignal(width);
+}
+
+void IDEWindow::on_Toggle_FileTree(bool checked) {
+    m_leftSidebar->setVisible(checked);
 }
 
 void IDEWindow::on_ClosingProject() {

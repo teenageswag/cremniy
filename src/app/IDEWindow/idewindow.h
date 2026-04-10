@@ -1,8 +1,8 @@
 #ifndef IDEWINDOW_H
 #define IDEWINDOW_H
 
-#include "filestabwidget.h"
-#include "filetreeview.h"
+#include "ui/FilesTabWidget/filestabwidget.h"
+#include "widgets//filetreeview.h"
 #include <QMainWindow>
 #include <qboxlayout.h>
 #include <qmenubar.h>
@@ -17,6 +17,7 @@ class IDEWindow : public QMainWindow
 public:
     explicit IDEWindow(QString ProjectPath, QWidget *parent = nullptr);
     ~IDEWindow() override;
+    bool openToolForCurrentFile(const QString& toolId);
 
 private slots:
 
@@ -36,6 +37,7 @@ private slots:
 
 
 private:
+    FileTab* currentFileTab() const;
 
     // - - Main Widgets - -
     QMenuBar* m_menuBar;
@@ -47,10 +49,14 @@ private:
 
     // - - General Widgets - -
     FilesTabWidget* m_filesTabWidget;
+
+    // - - Sidebar Widgets - -
+    QWidget* m_leftSidebar;
     FileTreeView* m_filesTreeView;
 
     // - - Terminal Widget - -
     TerminalWidget* m_terminal;
+    QString m_projectPath;
 
 
 public slots:
@@ -84,13 +90,36 @@ public slots:
 
     /**
      * @brief Отображение терминала
-    */
+     */
     void on_Toggle_Terminal(bool checked);
 
+    /**
+     * @brief Переключение переноса строк в редакторах кода
+     */
+    void on_SetWordWrap(bool checked);
+
+    /**
+     * @brief Переключение вставки пробелов вместо tab в редакторах кода
+     */
+    void on_SetTabReplace(bool checked);
+
+    /**
+     * @brief Изменение визуальной ширины tab в редакторах кода
+     */
+    void on_SetTabWidth(int width);
+
+    /**
+     * @brief Отображение дерева файлов
+    */
+    void on_Toggle_FileTree(bool checked);
 
 signals:
     void saveFileSignal();
     void CloseProject();
+
+    void setWordWrapSignal(bool checked);
+    void setTabReplaceSignal(bool checked);
+    void setTabWidthSignal(int width);
 
 };
 #endif // IDEWINDOW_H
