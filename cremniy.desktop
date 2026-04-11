@@ -2,7 +2,9 @@
 Type=Application
 Name=Cremniy
 GenericName=Low-Level Development Environment
+GenericName[ru]=Среда низкоуровневой разработки
 Comment=Integrated environment for low-level programming with hex editor, disassembler, and code editor
+Comment[ru]=Интегрированная среда для низкоуровневого программирования с hex-редактором, дизассемблером и редактором кода
 Exec=cremniy %F
 Icon=cremniy
 Terminal=false
