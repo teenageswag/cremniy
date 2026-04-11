@@ -3,7 +3,9 @@
 #include <QPixmap>
 #include <QPainter>
 
-IconProvider::IconProvider() : QFileIconProvider() {}
+IconProvider::IconProvider() : QFileIconProvider() 
+{
+}
 
 // Универсальная функция для покраски в любой цвет
 QIcon paintIcon(const QIcon &icon, QColor color) {
