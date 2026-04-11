@@ -6,7 +6,7 @@
 #include <qheaderview.h>
 #include <qjsondocument.h>
 #include <qjsonobject.h>
-#include "utils/iconprovider.h"
+#include "core/icons/iconprovider.h"
 #include <QApplication>
 #include "dialogs/settingsdialog.h"
 #include "ui/MenuBar/menubarbuilder.h"
