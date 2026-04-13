@@ -25,6 +25,7 @@
 
 ### ✨ Улучшения и новые задачи
 
+- [ ] 🟡 [Улучшить дизайн формы поиска строки в редакторе](https://github.com/munirov/cremniy/issues/177)
 - [ ] 🟡 [Отображение чисел в разных системах счисления при наведении](https://github.com/Cremniy-Project/cremniy/issues/28)
 - [ ] 🟡 [Справочник по скан-кодам клавиш](https://github.com/munirov/cremniy/issues/89)
 - [ ] 🟡 [Улучшить терминал](https://github.com/munirov/cremniy/issues/100)
