@@ -360,3 +360,20 @@ QWidget#searchWidget QPushButton:pressed {
     border: 2px solid #2c4c7c;
     font-weight: bold;
 }
+
+QDialog#settingsDialog QLabel#settingsSectionTitle {
+    font-weight: bold;
+}
+
+QDialog#settingsDialog QLabel#settingsHintLabel {
+    color: gray;
+    font-size: 11px;
+}
+
+QDialog#settingsDialog QLabel#settingsStatusLabel[statusState="ok"] {
+    color: #39d353;
+}
+
+QDialog#settingsDialog QLabel#settingsStatusLabel[statusState="missing"] {
+    color: #f85149;
+}

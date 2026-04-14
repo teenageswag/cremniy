@@ -59,6 +59,8 @@ qt_add_executable(${PROJECT_NAME}
     core/settings/appsettings.h
     core/icons/iconprovider.cpp
     core/icons/iconprovider.h
+    core/settings/exclusionfilterproxymodel.cpp
+    core/settings/exclusionfilterproxymodel.h
 
     # UI
     ui/FilesTabWidget/filestabwidget.cpp
@@ -88,8 +90,8 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/FilesTabWidget
 )
 
-file(GLOB_RECURSE PHOICONS_FILES 
-    "resources/icons/phoicons/*.svg" 
+file(GLOB_RECURSE PHOICONS_FILES
+    "resources/icons/phoicons/*.svg"
     "resources/icons/phoicons/*.theme"
 )
 
