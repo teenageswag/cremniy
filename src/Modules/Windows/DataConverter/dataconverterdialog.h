@@ -1,6 +1,7 @@
     #ifndef DATACONVERTERDIALOG_H
 #define DATACONVERTERDIALOG_H
 
+#include "core/modules/WindowBase.h"
 #include <QDialog>
 
 class QComboBox;
@@ -9,7 +10,7 @@ class QLabel;
 class QPushButton;
 class QFormLayout;
 
-class DataConverterDialog final : public QDialog
+class DataConverterDialog final : public WindowBase
 {
     Q_OBJECT
 public:

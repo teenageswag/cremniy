@@ -10,7 +10,7 @@
 #include "core/modules/ModuleManager.h"
 
 static bool registered = []() {
-    ModuleManager::instance().registerTab("1", []() { return new BinaryTab(); });
+    ModuleManager::instance().registerTab("Binary", "always", []() { return new BinaryTab(); }, 200);
     return true;
 }();
 

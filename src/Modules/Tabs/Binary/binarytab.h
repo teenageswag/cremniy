@@ -31,8 +31,7 @@ protected slots:
 public:
     explicit BinaryTab(QWidget *parent = nullptr);
 
-    QString toolName() const override { return "Binary"; };
-    QIcon toolIcon() const override { return QIcon(":/icons/binary.png"); };
+    QIcon icon() const override { return QIcon(":/icons/binary.png"); };
 
 public slots:
 

@@ -1,15 +1,13 @@
 #ifndef SHELLCODEGENERATORDIALOG_H
 #define SHELLCODEGENERATORDIALOG_H
 
+#include "core/modules/WindowBase.h"
 #include <QComboBox>
-#include <QDialog>
 #include <QLabel>
 #include <QPushButton>
 #include <QTextEdit>
-#include <cstdint>
-#include <vector>
 
-class ShellcodeGeneratorDialog : public QDialog {
+class ShellcodeGeneratorDialog : public WindowBase {
     Q_OBJECT
   public:
     explicit ShellcodeGeneratorDialog(QWidget *parent = nullptr);

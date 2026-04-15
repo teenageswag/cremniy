@@ -1,6 +1,7 @@
 #include "codeeditortab.h"
 #include "utils/utils.h"
 #include "libs/CodeEditor/include/widgets/CustomCodeEditor.h"
+#include "core/modules/ModuleManager.h"
 
 #include <QBoxLayout>
 #include <QFileInfo>
@@ -13,8 +14,10 @@
 #include <QVBoxLayout>
 #include <QCheckBox>
 
-static const bool registeredCodeEditorTab =
-    registerAlwaysToolTab<CodeEditorTab>(QStringLiteral("code"), QStringLiteral("Code"), 100);
+static bool registered = []() {
+    ModuleManager::instance().registerTab("Code", "always", []() { return new CodeEditorTab(); }, 100);
+    return true;
+}();
 
 CodeEditorTab::CodeEditorTab(QWidget* parent)
     : TabBase(parent)

@@ -19,7 +19,12 @@
 #include <QTextStream>
 #include <QTimer>
 #include <QVBoxLayout>
+#include "core/modules/ModuleManager.h"
 
+static bool registered = []() {
+    ModuleManager::instance().registerWindow("ShellCode Generator", "", []() { return new ShellcodeGeneratorDialog(); });
+    return true;
+}();
 
 struct ArchEntry {
     const char *label;
@@ -67,7 +72,7 @@ QString ShellcodeGeneratorDialog::findTool(const QString &name) {
     return name;
 }
 
-ShellcodeGeneratorDialog::ShellcodeGeneratorDialog(QWidget *parent) : QDialog(parent) {
+ShellcodeGeneratorDialog::ShellcodeGeneratorDialog(QWidget *parent) : WindowBase(parent) {
     setWindowTitle(tr("Shellcode Generator"));
     setModal(false);
     setMinimumSize(QSize(1400, 760));

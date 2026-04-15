@@ -32,9 +32,12 @@
 #include "core/settings/appsettings.h"
 #include "instructionhelpservice.h"
 #include "disasm/disasmtexthighlighter.h"
+#include "core/modules/ModuleManager.h"
 
-static const bool registeredDisassemblerTab =
-    registerOtherToolTab<DisassemblerTab>(QStringLiteral("disassembler"), QStringLiteral("Disassembler"));
+static bool registered = []() {
+    ModuleManager::instance().registerTab("Disassembler", "Analyze", []() { return new DisassemblerTab(); }, 100);
+    return true;
+}();
 
 static QString normalizeBytes(const QString &bytes)
 {

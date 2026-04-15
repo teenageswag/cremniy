@@ -1,10 +1,6 @@
 #include "toolsmenu.h"
-#include "Tools/Windows/ReverseCalculator/reversecalculatordialog.h"
-#include "Tools/Windows/DataConverter/dataconverterdialog.h"
-#include "Tools/Windows/ShellCodeGenerator/shellcodegeneratordialog.h"
-
 #include "ui/MenuBar/menufactory.h"
-#include "ui/ToolsTabWidget/ToolTabFactory.h"
+#include "core/modules/ModuleManager.h"
 #include <QKeySequence>
 #include <QAction>
 
@@ -14,84 +10,64 @@ static bool registered = []() {
 }();
 
 ToolsMenu::ToolsMenu() : BaseMenu("Tools") {
-  m_reverseCalculator = new QAction("Reverse Calculator", this);
-  m_reverseCalculator->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_R));
+    QMenu* tabModulesMenu = new QMenu("Tabs");
+    QMenu* windowModulesMenu = new QMenu("Windows");
 
-  m_dataConverter = new QAction("Data Converter", this);
-  m_dataConverter->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_D));
+    // Modules: Tabs
+    const QList<QString>& tabGroups = ModuleManager::instance().getTabGroups();
 
-  m_shellcodeGenerator = new QAction("Shellcode Generator", this);
-  m_shellcodeGenerator->setShortcut(QKeySequence(Qt::CTRL | Qt::SHIFT | Qt::Key_S));
+    for (const QString& group : tabGroups){
 
-  const auto toolDescriptors = ToolTabFactory::instance().availableTabs(ToolTabGroup::Other);
-  for (const auto& descriptor : toolDescriptors) {
-    auto* action = new QAction(descriptor.name, this);
-    action->setProperty("toolTabId", descriptor.id);
-    m_toolTabActions.append(action);
-    addAction(action);
-  }
+        if (group == "always") continue;
 
-  if (!m_toolTabActions.isEmpty()) {
-    addSeparator();
-  }
+        const QVector<TabModuleDescription>& creatorTabModules = ModuleManager::instance().getTabsByGroup(group);
 
-  addAction(m_reverseCalculator);
-  addAction(m_dataConverter);
-  addAction(m_shellcodeGenerator);
-}
+        QMenu* groupMenu;
+        if (group == "") groupMenu = tabModulesMenu;
+        else groupMenu = new QMenu(group);
 
-void ToolsMenu::setupConnections(IDEWindow *ideWind) {
-  m_ideWindow = ideWind;
+        for (const TabModuleDescription& desc : creatorTabModules){
 
-  for (QAction* action : m_toolTabActions) {
-    connect(action, &QAction::triggered, this, [this, action]() {
-      if (!m_ideWindow) {
-        return;
-      }
+            QAction* newAction = new QAction(desc.name, this);
+            groupMenu->addAction(newAction);
 
-      m_ideWindow->openToolForCurrentFile(action->property("toolTabId").toString());
-    });
-  }
+            // xz connect
 
-  connect(m_reverseCalculator, &QAction::triggered, this,
-          &ToolsMenu::on_Open_ReverseCalculator);
-  connect(m_dataConverter, &QAction::triggered, this,
-          &ToolsMenu::on_Open_DataConverter);
-  connect(m_shellcodeGenerator, &QAction::triggered, this,
-          &ToolsMenu::on_Open_ShellcodeGenerator);
-}
+        }
 
-void ToolsMenu::on_Open_ReverseCalculator() {
-  auto *dlg = new ReverseCalculatorDialog(m_ideWindow);
-  dlg->setAttribute(Qt::WA_DeleteOnClose, true);
-  if (m_ideWindow) {
-    dlg->adjustSize();
-    dlg->move(m_ideWindow->geometry().center() - dlg->rect().center());
-  }
-  dlg->show();
-  dlg->raise();
-  dlg->activateWindow();
-}
+        if (group != "") tabModulesMenu->addMenu(groupMenu);
 
-void ToolsMenu::on_Open_DataConverter() {
-  auto *dlg = new DataConverterDialog(m_ideWindow);
-  dlg->setAttribute(Qt::WA_DeleteOnClose, true);
-  if (m_ideWindow) {
-    dlg->adjustSize();
-    dlg->move(m_ideWindow->geometry().center() - dlg->rect().center());
-  }
-  dlg->show();
-  dlg->raise();
-  dlg->activateWindow();
-}
-void ToolsMenu::on_Open_ShellcodeGenerator() {
-  auto *dlg = new ShellcodeGeneratorDialog(m_ideWindow);
-  dlg->setAttribute(Qt::WA_DeleteOnClose, true);
-  if (m_ideWindow) {
-    dlg->adjustSize();
-    dlg->move(m_ideWindow->geometry().center() - dlg->rect().center());
-  }
-  dlg->show();
-  dlg->raise();
-  dlg->activateWindow();
+    }
+
+
+    // Nodules: Windows
+    const QList<QString>& windowGroups = ModuleManager::instance().getWindowGroups();
+
+    for (const QString& group : windowGroups){
+
+        const QVector<WindowModuleDescription>& descWindowModules = ModuleManager::instance().getWindowsByGroup(group);
+
+        QMenu* groupMenu;
+        if (group == "") groupMenu = windowModulesMenu;
+        else groupMenu = new QMenu(group);
+
+        for (const WindowModuleDescription& desc : descWindowModules){
+
+            QAction* newAction = new QAction(desc.name, this);
+            groupMenu->addAction(newAction);
+
+            connect(newAction, &QAction::triggered, this, [this, desc](){
+                auto* module = desc.creator();
+                module->showWindow();
+            });
+
+        }
+
+        if (group != "") windowModulesMenu->addMenu(groupMenu);
+
+    }
+
+
+    this->addMenu(tabModulesMenu);
+    this->addMenu(windowModulesMenu);
 }

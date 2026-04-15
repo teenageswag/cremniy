@@ -10,6 +10,12 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include "core/modules/ModuleManager.h"
+
+static bool registered = []() {
+    ModuleManager::instance().registerWindow("Data Converter", "", []() { return new DataConverterDialog(); });
+    return true;
+}();
 
 struct UnitInfo {
 	const char* label;      // displayed in the form label
@@ -60,7 +66,7 @@ QString DataConverterDialog::formatValue(double value)
 }
 
 DataConverterDialog::DataConverterDialog(QWidget* parent)
-    : QDialog(parent)
+    : WindowBase(parent)
 {
     setWindowTitle(tr("Data Converter"));
     setModal(false);

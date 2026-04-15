@@ -4,8 +4,17 @@
 #include <QObject>
 #include <qdialog.h>
 
-class WindowBase : QWidget {
+class WindowBase : public QDialog {
     Q_OBJECT
+
+private:
+
+
+public:
+    explicit WindowBase(QWidget* parent = nullptr) : QDialog(parent){}
+
+public slots:
+    void showWindow() { this->show(); }
 
 };
 

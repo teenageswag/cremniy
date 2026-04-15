@@ -66,8 +66,7 @@ private:
 public:
     explicit CodeEditorTab(QWidget *parent = nullptr);
 
-    QString toolName() const override { return "Code"; };
-    QIcon toolIcon() const override { return QIcon(":/icons/code.png"); };
+    QIcon icon() const override { return QIcon(":/icons/code.png"); };
 
 signals:
 

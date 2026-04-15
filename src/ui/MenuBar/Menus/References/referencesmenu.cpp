@@ -1,6 +1,6 @@
 #include "referencesmenu.h"
+#include "core/modules/ModuleManager.h"
 #include "ui/MenuBar/menufactory.h"
-#include "ui/MenuBar/Menus/References/referencewindowfactory.h"
 
 static bool registered = [](){
     MenuFactory::instance().registerMenu("6", [](){
@@ -10,13 +10,24 @@ static bool registered = [](){
 }();
 
 ReferencesMenu::ReferencesMenu() : BaseMenu("References") {
-    auto& RefWinFactory = ReferenceWindowFactory::instance();
-    qDebug() << RefWinFactory.availableRefWins();
-    for (const QString& RefWinID : RefWinFactory.availableRefWins()){
-        ReferenceWindow* refWin = RefWinFactory.create(RefWinID);
-        QAction* act = new QAction(refWin->RefWinName(), this);
-        this->addAction(act);
-        connect(act, &QAction::triggered, refWin, &ReferenceWindow::showWindow);
-    }
+    QList<QString> groups = ModuleManager::instance().getReferenceGroups();
+    for (QString group : groups){
 
+        const QVector<ReferenceModuleDescription>& descRefModules = ModuleManager::instance().getReferencesByGroup(group);
+
+        QMenu* groupMenu;
+        if (group == "") groupMenu = this;
+        else groupMenu = new QMenu(group);
+
+        for (const ReferenceModuleDescription& desc : descRefModules){
+            QAction* newAction = new QAction(desc.name, this);
+            groupMenu->addAction(newAction);
+            connect(newAction, &QAction::triggered, this, [this, desc](){
+                auto* module = desc.creator();
+                module->showWindow();
+            });
+        }
+        if (group != "") this->addMenu(groupMenu);
+
+    }
 }

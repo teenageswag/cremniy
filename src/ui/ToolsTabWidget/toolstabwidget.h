@@ -27,7 +27,6 @@ public:
 
 private:
     void loadStyle(QString path, QString name);
-    TabBase* findToolTab(const QString& toolId) const;
     void createAlwaysTabs();
     void updateCloseButtons();
     FileDataBuffer* m_sharedBuffer = nullptr;

@@ -1,6 +1,7 @@
 #ifndef REVERSECALCULATORDIALOG_H
 #define REVERSECALCULATORDIALOG_H
 
+#include "core/modules/WindowBase.h"
 #include <QDialog>
 #include <QMap>
 #include <QString>
@@ -12,7 +13,7 @@ class QPushButton;
 class QListWidget;
 class QListWidgetItem;
 
-class ReverseCalculatorDialog final : public QDialog {
+class ReverseCalculatorDialog final : public WindowBase {
     Q_OBJECT
 public:
     explicit ReverseCalculatorDialog(QWidget *parent = nullptr);

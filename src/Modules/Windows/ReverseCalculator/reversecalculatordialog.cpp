@@ -16,6 +16,13 @@
 #include <QString>
 #include <QStringBuilder>
 
+#include "core/modules/ModuleManager.h"
+
+static bool registered = []() {
+    ModuleManager::instance().registerWindow("Reverse Calulator", "", []() { return new ReverseCalculatorDialog(); });
+    return true;
+}();
+
 namespace {
 QFrame *makeSeparator(QWidget *parent) {
     auto *f = new QFrame(parent);
@@ -43,7 +50,7 @@ QLabel *makeValueLabel(QWidget *parent) {
 }
 } // namespace
 
-ReverseCalculatorDialog::ReverseCalculatorDialog(QWidget *parent) : QDialog(parent) {
+ReverseCalculatorDialog::ReverseCalculatorDialog(QWidget *parent) : WindowBase(parent) {
     setWindowTitle(tr("Reverse Calculator"));
     setModal(false);
     setMinimumWidth(620);

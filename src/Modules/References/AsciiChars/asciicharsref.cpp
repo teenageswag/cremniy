@@ -12,9 +12,9 @@
 #include "core/modules/ModuleManager.h"
 
 static bool registered = []() {
-    ModuleManager::instance().registerReference("1", []() { return new AsciiCharsRef(); });
+    ModuleManager::instance().registerReference("ASCII/Unicode Characters", "", []() { return new AsciiCharsRef(); });
     return true;
-    }();
+}();
 
 AsciiCharsRef::AsciiCharsRef()
 {

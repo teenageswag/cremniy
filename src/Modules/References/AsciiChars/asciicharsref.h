@@ -9,7 +9,6 @@ class AsciiCharsRef : public ReferenceBase
     Q_OBJECT
 public:
     explicit AsciiCharsRef();
-    QString name() override { return "ASCII / Unicode Characters"; }
 
 private:
     void initWindow() override;

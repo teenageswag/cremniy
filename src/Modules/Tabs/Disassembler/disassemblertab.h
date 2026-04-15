@@ -32,8 +32,7 @@ public:
     explicit DisassemblerTab(QWidget *parent = nullptr);
     ~DisassemblerTab();
 
-    QString toolName() const override { return "Disassembler"; };
-    QIcon toolIcon() const override { return QIcon(":/icons/dasm.png"); };
+    QIcon icon() const override { return QIcon(":/icons/dasm.png"); };
 
     void saveToFile(QString path) {}
     void setTabData(QByteArray &data);
