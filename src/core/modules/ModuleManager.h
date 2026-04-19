@@ -4,15 +4,12 @@
 #include <functional>
 #include <QList>
 #include <QString>
-#include <QKeySequence>
-
 
 template<typename T>
 struct ModuleDescription {
     std::function<T*()> creator;
     std::function<QString()> name;
     int position = 0;
-    QKeySequence shortcut;
 };
 
 template<typename T>
@@ -24,12 +21,11 @@ public:
     static ModuleManager& instance();
 
     template<typename T>
-    void registerModule(std::function<QString()> name, const QString &group, std::function<T*()> creator, int position = 0, const QKeySequence &shortcut = QKeySequence()) const {
+    void registerModule(std::function<QString()> name, const QString &group, std::function<T*()> creator, int position = 0) const {
         ModuleDescription<T> desc{
             std::move(creator),
             std::move(name),
-            position,
-            shortcut
+            position
         };
         getStorage<T>()[group.trimmed()].push_back(std::move(desc));
     }

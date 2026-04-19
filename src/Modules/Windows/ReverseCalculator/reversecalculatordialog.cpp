@@ -22,7 +22,7 @@ static QString displayName() {
 
 static bool registered = []() {
     ModuleManager::instance().registerModule<WindowBase>(
-    &displayName, "", []() { return new ReverseCalculatorDialog(); }, 0, QKeySequence("Ctrl+Shift+R"));
+    &displayName, "", []() { return new ReverseCalculatorDialog(); }, 0);
     return true;
 }();
 

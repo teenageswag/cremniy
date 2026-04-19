@@ -19,7 +19,7 @@ static QString displayName() {
 
 static bool registered = []() {
     ModuleManager::instance().registerModule<WindowBase>(
-        &displayName, "", []() { return new ShellcodeGeneratorDialog(); }, 0, QKeySequence("Ctrl+Shift+S"));
+        &displayName, "", []() { return new ShellcodeGeneratorDialog(); }, 0);
     return true;
 }();
 
