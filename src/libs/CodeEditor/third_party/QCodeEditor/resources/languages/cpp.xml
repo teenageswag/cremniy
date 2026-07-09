@@ -91,20 +91,20 @@
         <name>synchronized</name>
     </section>
     <section name="Preprocessor">
-        <name>include</name>
-        <name>define</name>
-        <name>undef</name>
-        <name>if</name>
-        <name>ifdef</name>
-        <name>ifndef</name>
-        <name>endif</name>
-        <name>else</name>
-        <name>elif</name>
-        <name>pragma</name>
-        <name>error</name>
-        <name>warning</name>
-        <name>line</name>
-        <name>embed</name>
+        <name>#include</name>
+        <name>#define</name>
+        <name>#undef</name>
+        <name>#if</name>
+        <name>#ifdef</name>
+        <name>#ifndef</name>
+        <name>#endif</name>
+        <name>#else</name>
+        <name>#elif</name>
+        <name>#pragma</name>
+        <name>#error</name>
+        <name>#warning</name>
+        <name>#line</name>
+        <name>#embed</name>
         <name>__cplusplus</name>
         <name>_WIN32</name>
         <name>_WIN64</name>
@@ -243,6 +243,91 @@
         <name>dlfcn.h</name>
         <name>fcntl.h</name>
         <name>termios.h</name>
+        <name>cctype</name>
+        <name>cwchar</name>
+        <name>cwctype</name>
+        <name>clocale</name>
+        <name>csignal</name>
+        <name>csetjmp</name>
+        <name>cfenv</name>
+        <name>ctgmath</name>
+        <name>cinttypes</name>
+        <name>cstdlib</name>
+        <name>cstdint</name>
+        <name>climits</name>
+        <name>cfloat</name>
+        <name>limits</name>
+        <name>locale</name>
+        <name>codecvt</name>
+        <name>shared_mutex</name>
+        <name>barrier</name>
+        <name>latch</name>
+        <name>memory_resource</name>
+        <name>any</name>
+        <name>variant</name>
+        <name>optional</name>
+        <name>compare</name>
+        <name>version</name>
+        <name>execution</name>
+        <name>scoped_allocator</name>
+        <name>typeindex</name>
+        <name>typeinfo</name>
+        <name>new</name>
+        <name>csignal</name>
+        <name>csetjmp</name>
+        <name>cstdarg</name>
+        <name>cstddef</name>
+        <name>cstdint</name>
+        <name>system_error</name>
+        <name>cerrno</name>
+        <name>sys/socket.h</name>
+        <name>netinet/in.h</name>
+        <name>arpa/inet.h</name>
+        <name>sys/mman.h</name>
+        <name>sys/ioctl.h</name>
+        <name>sys/wait.h</name>
+        <name>netdb.h</name>
+        <name>sys/time.h</name>
+        <name>sys/resource.h</name>
+        <name>sys/un.h</name>
+        <name>sys/epoll.h</name>
+        <name>sys/select.h</name>
+        <name>sys/sendfile.h</name>
+        <name>sys/syscall.h</name>
+        <name>linux/if_packet.h</name>
+        <name>linux/input.h</name>
+        <name>pwd.h</name>
+        <name>grp.h</name>
+        <name>shadow.h</name>
+        <name>utmp.h</name>
+        <name>glob.h</name>
+        <name>libgen.h</name>
+        <name>fnmatch.h</name>
+        <name>wordexp.h</name>
+        <name>regex.h</name>
+        <name>poll.h</name>
+        <name>syslog.h</name>
+        <name>strings.h</name>
+        <name>byteswap.h</name>
+        <name>endian.h</name>
+        <name>link.h</name>
+        <name>elf.h</name>
+        <name>pthread.h</name>
+        <name>sched.h</name>
+        <name>semaphore.h</name>
+        <name>mqueue.h</name>
+        <name>aio.h</name>
+        <name>spawn.h</name>
+        <name>ulimit.h</name>
+        <name>utmpx.h</name>
+        <name>lastlog.h</name>
+        <name>mntent.h</name>
+        <name>paths.h</name>
+        <name>resolv.h</name>
+        <name>net/if.h</name>
+        <name>net/route.h</name>
+        <name>net/ethernet.h</name>
+        <name>netpacket/packet.h</name>
     </section>
     <section name="StdLibrary">
         <name>unique_ptr</name>
@@ -502,20 +587,9 @@
     </section>
     <section name="Snippet">
         <name>reinterpret_cast</name>
-        <name>static_cast</name>
-        <name>dynamic_cast</name>
-        <name>const_cast</name>
-        <name>if</name>
         <name>if-else</name>
-        <name>for</name>
         <name>for-range</name>
-        <name>while</name>
-        <name>switch</name>
         <name>try-catch</name>
-        <name>class</name>
-        <name>struct</name>
-        <name>namespace</name>
-        <name>enum</name>
         <name>function</name>
         <name>lambda</name>
     </section>

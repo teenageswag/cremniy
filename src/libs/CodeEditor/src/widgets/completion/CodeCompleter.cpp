@@ -95,7 +95,17 @@ void CodeCompleter::triggerCompletion()
     filterByContext();
 
     WordInfo word = wordUnderCursor();
-    m_model->setFilterPrefix(word.text);
+    QString prefix = word.text;
+    QString linePrefix = currentLinePrefix().trimmed();
+
+    // In preprocessor context (but NOT header context), prepend # for matching
+    bool isHeaderContext = linePrefix.startsWith(QStringLiteral("#include"))
+                           || linePrefix.startsWith(QStringLiteral("# include"));
+    if (!isHeaderContext && linePrefix.startsWith(QStringLiteral("#"))
+        && !prefix.startsWith(QStringLiteral("#")))
+        prefix = QStringLiteral("#") + prefix;
+
+    m_model->setFilterPrefix(prefix);
 
     if (m_model->filteredCount() == 0) {
         hide();
@@ -115,7 +125,16 @@ void CodeCompleter::updateCompletions(const QString& prefix)
 
     filterByContext();
 
-    m_model->setFilterPrefix(prefix);
+    QString adjustedPrefix = prefix;
+    QString linePrefix = currentLinePrefix().trimmed();
+
+    // In preprocessor context (but NOT header context), prepend # for matching
+    bool isHeaderContext = linePrefix.startsWith(QStringLiteral("#include"))
+                           || linePrefix.startsWith(QStringLiteral("# include"));
+    if (!isHeaderContext && linePrefix.startsWith(QStringLiteral("#"))
+        && !adjustedPrefix.startsWith(QStringLiteral("#")))
+        adjustedPrefix = QStringLiteral("#") + adjustedPrefix;
+    m_model->setFilterPrefix(adjustedPrefix);
 
     if (m_model->filteredCount() == 0) {
         hide();
@@ -295,8 +314,10 @@ bool CodeCompleter::checkTriggerCharacter(const QString& insertedChar, const QSt
         return true;
     }
 
+    QString trimmed = linePrefix.trimmed();
     if ((insertedChar == QStringLiteral("<") || insertedChar == QStringLiteral("\""))
-        && linePrefix.trimmed().startsWith(QStringLiteral("#include"))) {
+        && (trimmed.startsWith(QStringLiteral("#include"))
+            || trimmed.startsWith(QStringLiteral("# include")))) {
         triggerCompletion();
         return true;
     }
@@ -490,7 +511,8 @@ void CodeCompleter::filterByContext()
 {
     QString linePrefix = currentLinePrefix().trimmed();
 
-    if (linePrefix.startsWith(QStringLiteral("#include"))) {
+    if (linePrefix.startsWith(QStringLiteral("#include"))
+        || linePrefix.startsWith(QStringLiteral("# include"))) {
         m_model->setCategoryFilter(QStringLiteral("Header"));
         return;
     }
@@ -522,24 +544,45 @@ void CodeCompleter::onCompletionAccepted(const QString& text)
 {
     WordInfo word = wordUnderCursor();
 
-    // Find the CompletionItem to check for snippet
+    // Find the CompletionItem to check for snippet — prefer items with snippets
     QString insertText = text;
     QString snippet;
     for (const auto& item : m_languageItems) {
-        if (item.text == text) {
+        if (item.text == text && !item.snippet.isEmpty()) {
             snippet = item.snippet;
             break;
+        }
+    }
+    if (snippet.isEmpty()) {
+        for (const auto& item : m_languageItems) {
+            if (item.text == text) {
+                snippet = item.snippet;
+                break;
+            }
         }
     }
 
     if (!snippet.isEmpty()) {
         insertText = expandSnippet(snippet);
-    } else if (word.startByte > 0 && !text.startsWith(QStringLiteral("#"))) {
-        // Check if there's a # just before the word (preprocessor context)
-        QByteArray buf = m_editor->getBuffer()->read(word.startByte - 1, 1);
-        if (buf == "#" && word.text.isEmpty() == false) {
-            // The # is already typed, don't duplicate it
-            // insertText is just the directive name (e.g. "define")
+    }
+
+    // Check context: header insertion after #include <
+    QString linePrefix = currentLinePrefix().trimmed();
+    bool isHeaderContext = linePrefix.startsWith(QStringLiteral("#include"))
+                           || linePrefix.startsWith(QStringLiteral("# include"));
+    if (isHeaderContext) {
+        insertText = text + QStringLiteral(">");
+    }
+
+    // If replacement text starts with # and there's a # just before the
+    // replaced range, strip the leading # to avoid ## duplication
+    if (insertText.startsWith(QStringLiteral("#")) && !isHeaderContext) {
+        qint64 checkPos = (word.byteLength > 0) ? word.startByte : m_editor->cursorPosition();
+        if (checkPos > 0) {
+            QByteArray buf = m_editor->getBuffer()->read(checkPos - 1, 1);
+            if (buf == "#") {
+                insertText = insertText.mid(1);
+            }
         }
     }
 

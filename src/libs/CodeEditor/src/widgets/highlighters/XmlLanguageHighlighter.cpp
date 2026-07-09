@@ -24,6 +24,10 @@ XmlLanguageHighlighter::XmlLanguageHighlighter(const QString& resourcePath,
         return;
 
     for (const QString& key : language.keys()) {
+        // Skip completion-only sections that shouldn't affect syntax highlighting
+        if (key == "HeaderFile" || key == "Snippet")
+            continue;
+
         const QString formatName = key == "Directive" || key == "Command" || key == "Variable" || key == "BuiltinFunction"
                                        ? QStringLiteral("Keyword")
                                        : key;

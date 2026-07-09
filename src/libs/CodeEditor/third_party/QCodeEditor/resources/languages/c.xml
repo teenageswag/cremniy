@@ -74,20 +74,20 @@
         <name>__func__</name>
     </section>
     <section name="Preprocessor">
-        <name>include</name>
-        <name>define</name>
-        <name>undef</name>
-        <name>if</name>
-        <name>ifdef</name>
-        <name>ifndef</name>
-        <name>endif</name>
-        <name>else</name>
-        <name>elif</name>
-        <name>pragma</name>
-        <name>error</name>
-        <name>warning</name>
-        <name>line</name>
-        <name>embed</name>
+        <name>#include</name>
+        <name>#define</name>
+        <name>#undef</name>
+        <name>#if</name>
+        <name>#ifdef</name>
+        <name>#ifndef</name>
+        <name>#endif</name>
+        <name>#else</name>
+        <name>#elif</name>
+        <name>#pragma</name>
+        <name>#error</name>
+        <name>#warning</name>
+        <name>#line</name>
+        <name>#embed</name>
         <name>_WIN32</name>
         <name>_WIN64</name>
         <name>_MSC_VER</name>

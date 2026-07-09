@@ -34,6 +34,10 @@ QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
     auto keys = language.keys();
     for (auto&& key : keys)
     {
+        // Skip completion-only sections that shouldn't affect syntax highlighting
+        if (key == "HeaderFile" || key == "Snippet")
+            continue;
+
         const QString formatName = (key == "StdLibrary") ? "Function" : key;
         auto names = language.names(key);
         for (auto&& name : names)
@@ -84,27 +88,6 @@ QCXXHighlighter::QCXXHighlighter(QTextDocument* document) :
 
 void QCXXHighlighter::highlightBlock(const QString& text)
 {
-    // Checking for include
-    {
-        auto matchIterator = m_includePattern.globalMatch(text);
-
-        while (matchIterator.hasNext())
-        {
-            auto match = matchIterator.next();
-
-            setFormat(
-                match.capturedStart(),
-                match.capturedLength(),
-                syntaxStyle()->getFormat("Preprocessor")
-            );
-
-            setFormat(
-                match.capturedStart(1),
-                match.capturedLength(1),
-                syntaxStyle()->getFormat("String")
-            );
-        }
-    }
     // Checking for function
     {
         auto matchIterator = m_functionPattern.globalMatch(text);
@@ -153,6 +136,30 @@ void QCXXHighlighter::highlightBlock(const QString& text)
                 match.capturedStart(),
                 match.capturedLength(),
                 syntaxStyle()->getFormat(rule.formatName)
+            );
+        }
+    }
+
+    // Include pattern runs LAST to override keyword matches inside headers
+    // (e.g. "iostream" from StdLibrary would be highlighted as Function,
+    //  but #include <iostream> should have <iostream> as String)
+    {
+        auto matchIterator = m_includePattern.globalMatch(text);
+
+        while (matchIterator.hasNext())
+        {
+            auto match = matchIterator.next();
+
+            setFormat(
+                match.capturedStart(),
+                match.capturedLength(),
+                syntaxStyle()->getFormat("Preprocessor")
+            );
+
+            setFormat(
+                match.capturedStart(1),
+                match.capturedLength(1),
+                syntaxStyle()->getFormat("String")
             );
         }
     }
