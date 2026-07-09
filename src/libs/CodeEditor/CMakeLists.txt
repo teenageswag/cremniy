@@ -20,6 +20,10 @@ add_library(CodeEditor STATIC
     include/widgets/EditorLanguageSupport.h
     include/widgets/EditorTypingBehaviors.h
     include/widgets/LineNumberArea.h
+    include/widgets/completion/CompletionItem.h
+    include/widgets/completion/CompletionModel.h
+    include/widgets/completion/CompletionPopup.h
+    include/widgets/completion/CodeCompleter.h
     src/core/LineCache.cpp
     src/core/LineIndex.cpp
     src/core/UTF8Decoder.cpp
@@ -28,6 +32,9 @@ add_library(CodeEditor STATIC
     src/widgets/EditorLanguageSupport.cpp
     src/widgets/EditorTypingBehaviors.cpp
     src/widgets/LineNumberArea.cpp
+    src/widgets/completion/CompletionModel.cpp
+    src/widgets/completion/CompletionPopup.cpp
+    src/widgets/completion/CodeCompleter.cpp
     src/widgets/highlighters/AsmHighlighter.h
     src/widgets/highlighters/AsmHighlighter.cpp
     src/widgets/highlighters/HighlighterFactory.h

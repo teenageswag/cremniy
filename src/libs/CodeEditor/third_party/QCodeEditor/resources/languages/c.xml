@@ -73,6 +73,44 @@
         <name>__FUNCTION__</name>
         <name>__func__</name>
     </section>
+    <section name="Preprocessor">
+        <name>include</name>
+        <name>define</name>
+        <name>undef</name>
+        <name>if</name>
+        <name>ifdef</name>
+        <name>ifndef</name>
+        <name>endif</name>
+        <name>else</name>
+        <name>elif</name>
+        <name>pragma</name>
+        <name>error</name>
+        <name>warning</name>
+        <name>line</name>
+        <name>embed</name>
+        <name>_WIN32</name>
+        <name>_WIN64</name>
+        <name>_MSC_VER</name>
+        <name>__GNUC__</name>
+        <name>__clang__</name>
+        <name>__FILE__</name>
+        <name>__LINE__</name>
+        <name>__func__</name>
+        <name>__VA_ARGS__</name>
+        <name>__VA_OPT__</name>
+        <name>__has_include</name>
+        <name>__has_attribute</name>
+        <name>__has_builtin</name>
+        <name>__DATE__</name>
+        <name>__TIME__</name>
+        <name>__STDC__</name>
+        <name>NOMINMAX</name>
+        <name>UNICODE</name>
+        <name>_UNICODE</name>
+        <name>DEBUG</name>
+        <name>NDEBUG</name>
+        <name>RELEASE</name>
+    </section>
     <section name="PrimitiveType">
         <name>bool</name>
         <name>char</name>
@@ -105,6 +143,52 @@
         <name>stdin</name>
         <name>stdout</name>
         <name>stderr</name>
+    </section>
+    <section name="HeaderFile">
+        <name>stdio.h</name>
+        <name>stdlib.h</name>
+        <name>string.h</name>
+        <name>math.h</name>
+        <name>ctype.h</name>
+        <name>limits.h</name>
+        <name>float.h</name>
+        <name>stdarg.h</name>
+        <name>stddef.h</name>
+        <name>stdint.h</name>
+        <name>stdbool.h</name>
+        <name>assert.h</name>
+        <name>errno.h</name>
+        <name>time.h</name>
+        <name>locale.h</name>
+        <name>setjmp.h</name>
+        <name>signal.h</name>
+        <name>fenv.h</name>
+        <name>wchar.h</name>
+        <name>wctype.h</name>
+        <name>complex.h</name>
+        <name>tgmath.h</name>
+        <name>inttypes.h</name>
+        <name>uchar.h</name>
+        <name>threads.h</name>
+        <name>stdalign.h</name>
+        <name>stdnoreturn.h</name>
+        <name>windows.h</name>
+        <name>winsock2.h</name>
+        <name>conio.h</name>
+        <name>unistd.h</name>
+        <name>sys/types.h</name>
+        <name>sys/stat.h</name>
+        <name>dirent.h</name>
+        <name>pthread.h</name>
+        <name>fcntl.h</name>
+        <name>termios.h</name>
+        <name>dlfcn.h</name>
+        <name>sys/socket.h</name>
+        <name>netinet/in.h</name>
+        <name>arpa/inet.h</name>
+        <name>sys/mman.h</name>
+        <name>sys/ioctl.h</name>
+        <name>sys/wait.h</name>
     </section>
     <section name="StdLibrary">
         <!-- printf/scanf family -->

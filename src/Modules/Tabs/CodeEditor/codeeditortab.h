@@ -2,6 +2,7 @@
 #define CODEEDITORTAB_H
 
 #include "libs/CodeEditor/include/widgets/CustomCodeEditor.h"
+#include "libs/CodeEditor/include/widgets/completion/CodeCompleter.h"
 #include "core/modules/TabBase.h"
 #include <QCheckBox>
 #include <QLabel>
@@ -19,6 +20,7 @@ private:
      * @brief Виджет редактора кода
     */
     CustomCodeEditor* m_codeEditorWidget;
+    CodeCompleter* m_codeCompleter;
 
     /**
      * @brief Главный виджет страницы "Binary File Detected"

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
     <section name="Keyword">
-        <!-- Core -->
         <name>alignas</name>
         <name>alignof</name>
         <name>and</name>
@@ -76,10 +75,8 @@
         <name>while</name>
         <name>xor</name>
         <name>xor_eq</name>
-        <!-- C++11 -->
         <name>override</name>
         <name>final</name>
-        <!-- C++20 -->
         <name>concept</name>
         <name>requires</name>
         <name>co_await</name>
@@ -92,6 +89,45 @@
         <name>atomic_commit</name>
         <name>atomic_noexcept</name>
         <name>synchronized</name>
+    </section>
+    <section name="Preprocessor">
+        <name>include</name>
+        <name>define</name>
+        <name>undef</name>
+        <name>if</name>
+        <name>ifdef</name>
+        <name>ifndef</name>
+        <name>endif</name>
+        <name>else</name>
+        <name>elif</name>
+        <name>pragma</name>
+        <name>error</name>
+        <name>warning</name>
+        <name>line</name>
+        <name>embed</name>
+        <name>__cplusplus</name>
+        <name>_WIN32</name>
+        <name>_WIN64</name>
+        <name>_MSC_VER</name>
+        <name>__GNUC__</name>
+        <name>__clang__</name>
+        <name>__FILE__</name>
+        <name>__LINE__</name>
+        <name>__func__</name>
+        <name>__VA_ARGS__</name>
+        <name>__VA_OPT__</name>
+        <name>__has_include</name>
+        <name>__has_attribute</name>
+        <name>__has_builtin</name>
+        <name>__DATE__</name>
+        <name>__TIME__</name>
+        <name>__STDC__</name>
+        <name>NOMINMAX</name>
+        <name>UNICODE</name>
+        <name>_UNICODE</name>
+        <name>DEBUG</name>
+        <name>NDEBUG</name>
+        <name>RELEASE</name>
     </section>
     <section name="PrimitiveType">
         <name>bool</name>
@@ -124,14 +160,96 @@
         <name>nullptr_t</name>
         <name>byte</name>
     </section>
+    <section name="HeaderFile">
+        <name>iostream</name>
+        <name>fstream</name>
+        <name>sstream</name>
+        <name>iomanip</name>
+        <name>string</name>
+        <name>vector</name>
+        <name>map</name>
+        <name>set</name>
+        <name>array</name>
+        <name>deque</name>
+        <name>list</name>
+        <name>unordered_map</name>
+        <name>unordered_set</name>
+        <name>memory</name>
+        <name>algorithm</name>
+        <name>numeric</name>
+        <name>functional</name>
+        <name>utility</name>
+        <name>tuple</name>
+        <name>optional</name>
+        <name>variant</name>
+        <name>any</name>
+        <name>span</name>
+        <name>string_view</name>
+        <name>type_traits</name>
+        <name>typeinfo</name>
+        <name>thread</name>
+        <name>mutex</name>
+        <name>atomic</name>
+        <name>future</name>
+        <name>condition_variable</name>
+        <name>chrono</name>
+        <name>ratio</name>
+        <name>cstdio</name>
+        <name>cstdlib</name>
+        <name>cstring</name>
+        <name>cmath</name>
+        <name>cassert</name>
+        <name>filesystem</name>
+        <name>format</name>
+        <name>ranges</name>
+        <name>concepts</name>
+        <name>coroutine</name>
+        <name>charconv</name>
+        <name>stack</name>
+        <name>queue</name>
+        <name>priority_queue</name>
+        <name>initializer_list</name>
+        <name>iterator</name>
+        <name>new</name>
+        <name>stdexcept</name>
+        <name>exception</name>
+        <name>regex</name>
+        <name>bitset</name>
+        <name>complex</name>
+        <name>climits</name>
+        <name>cfloat</name>
+        <name>cinttypes</name>
+        <name>source_location</name>
+        <name>numbers</name>
+        <name>bit</name>
+        <name>syncstream</name>
+        <name>semaphore</name>
+        <name>stop_token</name>
+        <name>mdspan</name>
+        <name>expected</name>
+        <name>print</name>
+        <name>generator</name>
+        <name>stacktrace</name>
+        <name>windows.h</name>
+        <name>winsock2.h</name>
+        <name>windowsx.h</name>
+        <name>conio.h</name>
+        <name>unistd.h</name>
+        <name>sys/types.h</name>
+        <name>sys/stat.h</name>
+        <name>dirent.h</name>
+        <name>signal.h</name>
+        <name>pthread.h</name>
+        <name>dlfcn.h</name>
+        <name>fcntl.h</name>
+        <name>termios.h</name>
+    </section>
     <section name="StdLibrary">
-        <!-- Smart pointers -->
         <name>unique_ptr</name>
         <name>shared_ptr</name>
         <name>weak_ptr</name>
         <name>make_unique</name>
         <name>make_shared</name>
-        <!-- Containers -->
         <name>vector</name>
         <name>string</name>
         <name>map</name>
@@ -148,7 +266,6 @@
         <name>any</name>
         <name>span</name>
         <name>string_view</name>
-        <!-- I/O -->
         <name>cin</name>
         <name>cout</name>
         <name>cerr</name>
@@ -162,7 +279,6 @@
         <name>istream</name>
         <name>ostream</name>
         <name>iostream</name>
-        <!-- Algorithms -->
         <name>sort</name>
         <name>stable_sort</name>
         <name>partial_sort</name>
@@ -188,7 +304,6 @@
         <name>shuffle</name>
         <name>sample</name>
         <name>clamp</name>
-        <!-- Math -->
         <name>abs</name>
         <name>sqrt</name>
         <name>pow</name>
@@ -212,7 +327,6 @@
         <name>hypot</name>
         <name>fmin</name>
         <name>fmax</name>
-        <!-- String conversion -->
         <name>to_string</name>
         <name>stoi</name>
         <name>stol</name>
@@ -223,13 +337,11 @@
         <name>stod</name>
         <name>stold</name>
         <name>getline</name>
-        <!-- Memory -->
         <name>allocator</name>
         <name>uninitialized_fill</name>
         <name>uninitialized_copy</name>
         <name>construct</name>
         <name>destroy</name>
-        <!-- Type traits -->
         <name>is_same</name>
         <name>is_base_of</name>
         <name>is_convertible</name>
@@ -248,7 +360,6 @@
         <name>add_rvalue_reference</name>
         <name>underlying_type</name>
         <name>type_identity</name>
-        <!-- Threads -->
         <name>thread</name>
         <name>mutex</name>
         <name>lock_guard</name>
@@ -259,7 +370,6 @@
         <name>async</name>
         <name>packaged_task</name>
         <name>this_thread</name>
-        <!-- chrono -->
         <name>chrono</name>
         <name>seconds</name>
         <name>milliseconds</name>
@@ -268,12 +378,145 @@
         <name>steady_clock</name>
         <name>system_clock</name>
         <name>high_resolution_clock</name>
-        <!-- Functional -->
         <name>function</name>
         <name>bind</name>
         <name>ref</name>
         <name>cref</name>
         <name>invoke</name>
         <name>apply</name>
+        <name>move</name>
+        <name>forward</name>
+        <name>swap</name>
+        <name>max</name>
+        <name>min</name>
+        <name>make_tuple</name>
+        <name>get</name>
+        <name>tie</name>
+        <name>begin</name>
+        <name>end</name>
+        <name>size</name>
+        <name>empty</name>
+        <name>data</name>
+        <name>as_const</name>
+        <name>to_array</name>
+        <name>launder</name>
+        <name>midpoint</name>
+        <name>bit_cast</name>
+        <name>assume_aligned</name>
+        <name>unreachable</name>
+        <name>format</name>
+        <name>print</name>
+        <name>println</name>
+        <name>ranges</name>
+        <name>views</name>
+        <name>expected</name>
+        <name>flat_map</name>
+        <name>flat_set</name>
+        <name>inplace_vector</name>
+        <name>jthread</name>
+        <name>stop_token</name>
+        <name>latch</name>
+        <name>barrier</name>
+        <name>counting_semaphore</name>
+        <name>generator</name>
+        <name>mdspan</name>
+        <name>stacktrace</name>
+        <name>make_error_code</name>
+        <name>make_error_condition</name>
+        <name>error_code</name>
+        <name>error_category</name>
+        <name>path</name>
+        <name>directory_iterator</name>
+        <name>recursive_directory_iterator</name>
+        <name>file_time_type</name>
+        <name>hardware_concurrency</name>
+        <name>once_flag</name>
+        <name>call_once</name>
+        <name>atomic_flag</name>
+        <name>atomic_bool</name>
+        <name>atomic_int</name>
+        <name>atomic_long</name>
+        <name>atomic_uint</name>
+        <name>memory_order_relaxed</name>
+        <name>memory_order_acquire</name>
+        <name>memory_order_release</name>
+        <name>memory_order_acq_rel</name>
+        <name>memory_order_seq_cst</name>
+        <name>is_same_v</name>
+        <name>is_base_of_v</name>
+        <name>is_convertible_v</name>
+        <name>is_integral_v</name>
+        <name>is_floating_point_v</name>
+        <name>is_pointer_v</name>
+        <name>is_reference_v</name>
+        <name>conditional_t</name>
+        <name>decay_t</name>
+        <name>remove_const_t</name>
+        <name>remove_reference_t</name>
+        <name>enable_if_t</name>
+        <name>void_t</name>
+        <name>conjunction</name>
+        <name>disjunction</name>
+        <name>negation</name>
+        <name>integral_constant</name>
+        <name>bool_constant</name>
+        <name>true_type</name>
+        <name>false_type</name>
+        <name>invoke_result</name>
+        <name>invoke_result_t</name>
+        <name>is_invocable</name>
+        <name>is_invocable_r</name>
+        <name>bind_front</name>
+        <name>not_fn</name>
+        <name>mem_fn</name>
+        <name>format_error</name>
+        <name>system_error</name>
+        <name>runtime_error</name>
+        <name>logic_error</name>
+        <name>invalid_argument</name>
+        <name>out_of_range</name>
+        <name>overflow_error</name>
+        <name>underflow_error</name>
+        <name>bad_alloc</name>
+        <name>bad_cast</name>
+        <name>bad_typeid</name>
+        <name>bad_optional_access</name>
+        <name>bad_variant_access</name>
+        <name>bad_any_cast</name>
+        <name>bad_function_call</name>
+        <name>integer_sequence</name>
+        <name>index_sequence</name>
+        <name>make_integer_sequence</name>
+        <name>make_index_sequence</name>
+        <name>exchange</name>
+        <name>clamp</name>
+        <name>muldiv</name>
+        <name>starts_with</name>
+        <name>ends_with</name>
+        <name>contains</name>
+        <name>to_integer</name>
+        <name>to_chars</name>
+        <name>from_chars</name>
+        <name>source_location</name>
+        <name>current</name>
+    </section>
+    <section name="Snippet">
+        <name>reinterpret_cast</name>
+        <name>static_cast</name>
+        <name>dynamic_cast</name>
+        <name>const_cast</name>
+        <name>if</name>
+        <name>if-else</name>
+        <name>for</name>
+        <name>for-range</name>
+        <name>while</name>
+        <name>switch</name>
+        <name>try-catch</name>
+        <name>class</name>
+        <name>struct</name>
+        <name>namespace</name>
+        <name>enum</name>
+        <name>function</name>
+        <name>lambda</name>
     </section>
 </root>

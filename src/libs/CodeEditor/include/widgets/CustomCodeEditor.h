@@ -22,6 +22,7 @@ class QSyntaxStyle;
 class QTextDocument;
 class LineNumberArea;
 class QTimer;
+class CodeCompleter;
 
 /**
  * @brief Custom code editor with direct buffer access
@@ -31,6 +32,7 @@ class QTimer;
  */
 class CustomCodeEditor : public QAbstractScrollArea, public ToolWidget {
     Q_OBJECT
+    friend class CodeCompleter;
 
 public:
     explicit CustomCodeEditor(QWidget* parent = nullptr);
@@ -79,6 +81,11 @@ public:
     // Line number area support
     int lineNumberAreaWidth() const;
     void lineNumberAreaPaintEvent(QPaintEvent* event);
+
+    // Code completion
+    void setCompleter(CodeCompleter* completer);
+    CodeCompleter* completer() const;
+    QString currentLinePrefix() const;
 
 signals:
     void contentsChanged();
@@ -293,6 +300,7 @@ private:
     mutable QHash<qint64, CachedLineLayout> m_displayLayoutCache;
     QTimer* m_editGroupTimer;
     EditGroupType m_currentEditGroupType;
+    CodeCompleter* m_completer = nullptr;
 };
 
 #endif // CUSTOMCODEEDITOR_H

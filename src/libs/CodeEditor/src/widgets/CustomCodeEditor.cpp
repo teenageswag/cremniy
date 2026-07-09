@@ -1,4 +1,5 @@
 #include "widgets/CustomCodeEditor.h"
+#include "widgets/completion/CodeCompleter.h"
 
 #include "widgets/EditorEditOperations.h"
 #include "widgets/EditorLanguageSupport.h"
@@ -602,6 +603,8 @@ void CustomCodeEditor::setFileExt(const QString& ext)
     m_highlightCacheStartLine = -1;
     m_highlightCacheEndLine = -1;
     rebuildHighlighterForCurrentExtension();
+    if (m_completer)
+        m_completer->setLanguageResource(EditorLanguageSupport::languageResourceForExtension(m_fileExt));
     viewport()->update();
 }
 
@@ -1002,6 +1005,11 @@ void CustomCodeEditor::keyPressEvent(QKeyEvent* event)
         return;
     }
 
+    if (m_completer && m_completer->isVisible()) {
+        if (m_completer->handleKeyPress(event))
+            return;
+    }
+
     logKeyEvent("keyPressEvent-enter", event, event, m_cursorBytePos);
 
     const bool shiftPressed = event->modifiers().testFlag(Qt::ShiftModifier);
@@ -1176,12 +1184,22 @@ void CustomCodeEditor::keyPressEvent(QKeyEvent* event)
         event->accept();
         return;
     }
+    if (controlPressed && event->key() == Qt::Key_Space) {
+        if (m_completer) {
+            endEditGrouping();
+            m_completer->triggerCompletion();
+        }
+        event->accept();
+        return;
+    }
     const QString text = event->text();
     if (text == QStringLiteral(" ") && !event->modifiers().testFlag(Qt::ControlModifier)) {
         beginEditGrouping(EditGroupTyping);
         if (kLogInputEvents)
             qDebug() << "[CustomCodeEditor][keyPressEvent] action=InsertSpaceByText";
         insertText(text);
+        if (m_completer)
+            m_completer->hide();
         event->accept();
         return;
     }
@@ -1209,6 +1227,13 @@ void CustomCodeEditor::keyPressEvent(QKeyEvent* event)
             deleteWordBackward();
         else
             deleteBackward();
+        if (m_completer && m_completer->isVisible()) {
+            const QString prefix = m_completer->wordUnderCursor().text;
+            if (prefix.length() >= 1)
+                m_completer->updateCompletions(prefix);
+            else
+                m_completer->hide();
+        }
         event->accept();
         return;
     case Qt::Key_Delete:
@@ -1219,6 +1244,13 @@ void CustomCodeEditor::keyPressEvent(QKeyEvent* event)
             deleteWordForward();
         else
             deleteForward();
+        if (m_completer && m_completer->isVisible()) {
+            const QString prefix = m_completer->wordUnderCursor().text;
+            if (prefix.length() >= 1)
+                m_completer->updateCompletions(prefix);
+            else
+                m_completer->hide();
+        }
         event->accept();
         return;
     case Qt::Key_Return:
@@ -1258,6 +1290,16 @@ void CustomCodeEditor::keyPressEvent(QKeyEvent* event)
         if (kLogInputEvents)
             qDebug().noquote() << QStringLiteral("[CustomCodeEditor][keyPressEvent] action=InsertPrintable text='%1'").arg(text);
         insertText(text);
+        if (m_completer) {
+            const QString linePrefix = currentLinePrefix();
+            if (!m_completer->checkTriggerCharacter(text, linePrefix)) {
+                const QString prefix = m_completer->wordUnderCursor().text;
+                if (prefix.length() >= 1)
+                    m_completer->updateCompletions(prefix);
+                else
+                    m_completer->hide();
+            }
+        }
         event->accept();
         return;
     }
@@ -1277,6 +1319,8 @@ void CustomCodeEditor::mousePressEvent(QMouseEvent* event)
 
     setFocus();
     endEditGrouping();
+    if (m_completer)
+        m_completer->hide();
 
     const QPoint clickPoint = event->position().toPoint();
     const qint64 now = QDateTime::currentMSecsSinceEpoch();
@@ -3607,4 +3651,32 @@ void CustomCodeEditor::renderSelectionMatches(QPainter* painter)
             index = text.indexOf(needle, index + needle.length());
         }
     }
+}
+
+void CustomCodeEditor::setCompleter(CodeCompleter* completer)
+{
+    if (m_completer)
+        m_completer->disconnect(this);
+    m_completer = completer;
+}
+
+CodeCompleter* CustomCodeEditor::completer() const
+{
+    return m_completer;
+}
+
+QString CustomCodeEditor::currentLinePrefix() const
+{
+    if (!m_buffer || m_lineIndex->lineCount() == 0)
+        return {};
+
+    const qint64 lineNum = lineFromBytePos(m_cursorBytePos);
+    const qint64 lineStart = lineVisibleStart(lineNum);
+    const qint64 lineEnd = m_cursorBytePos;
+
+    if (lineEnd <= lineStart)
+        return {};
+
+    QByteArray bytes = m_buffer->read(lineStart, lineEnd - lineStart);
+    return QString::fromUtf8(bytes);
 }

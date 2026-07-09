@@ -1,6 +1,7 @@
 #include "codeeditortab.h"
 #include "utils/utils.h"
 #include "libs/CodeEditor/include/widgets/CustomCodeEditor.h"
+#include "libs/CodeEditor/include/widgets/EditorLanguageSupport.h"
 #include "core/modules/ModuleManager.h"
 
 #include <QBoxLayout>
@@ -70,6 +71,8 @@ CodeEditorTab::CodeEditorTab(QWidget* parent)
 
     // - - Code Editor - -
     m_codeEditorWidget = new CustomCodeEditor(this);
+    m_codeCompleter = new CodeCompleter(m_codeEditorWidget, this);
+    m_codeEditorWidget->setCompleter(m_codeCompleter);
     m_overlayWidget = new QWidget(this);
     auto overlayLayout = new QVBoxLayout(m_overlayWidget);
     overlayLayout->setAlignment(Qt::AlignCenter);
@@ -278,6 +281,9 @@ void CodeEditorTab::setFile(QString filepath)
 {
     m_fileContext = new FileContext(filepath);
     m_codeEditorWidget->setFileExt(CustomCodeEditor::syntaxKeyForPath(filepath));
+    m_codeCompleter->setLanguageResource(
+        EditorLanguageSupport::languageResourceForExtension(
+            CustomCodeEditor::syntaxKeyForPath(filepath)));
     m_currentLang = detectLanguage(filepath);
 }
 
